@@ -6,6 +6,7 @@ import { Roboto, Rubik_80s_Fade, Raleway_Dots, Ubuntu } from "next/font/google";
 // import { GeistMono } from "geist/font/mono";
 
 import "./globals.css";
+import Navbar from "@/components/navbar";
 // import Footer from "../components/Footer";
 
 const roboto = Roboto({
@@ -50,8 +51,10 @@ export default function RootLayout({
         `}
       </Script> */}
       {/* <body className={GeistSans.className}> */}
+      
 
       <body className={ubuntu.className}>
+        <Navbar/>
         {children}
         {/* <Footer /> */}
       </body>
