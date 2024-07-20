@@ -59,7 +59,7 @@ export default function navbar() {
                 <span className="sr-only">Your Company</span>
                 <img
                   alt=""
-                  src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+                  src="/catchup_circle.png"
                   className="h-8 w-auto"
                 />
               </a>
