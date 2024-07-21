@@ -17,6 +17,7 @@ import { TextGenerateEffect } from "@/components/text-generate-effect";
 import { Progress } from "@/components/ui/progress";
 import { InputForm } from "@/components/input-form";
 import { Textarea } from "@/components/ui/textarea";
+import articleJson from "@/lib/articles.json";
 interface ImpactItem {
   num: number;
   url: string;
@@ -24,6 +25,7 @@ interface ImpactItem {
   authors: string;
   time: string;
   abstract: string;
+  arxiv: string;
 }
 const impact: ImpactItem[] = [
   {
@@ -34,6 +36,7 @@ const impact: ImpactItem[] = [
     time: "19 July 2024",
     abstract:
       "A comprehensive guide on how to set realistic and achievable goals to ensure continuous personal and professional growth.",
+    arxiv: "https://arxiv.org/abs/2407.12795",
   },
   {
     num: 89,
@@ -43,6 +46,7 @@ const impact: ImpactItem[] = [
     time: "20 July 2024",
     abstract:
       "Strategies and techniques for managing time effectively to enhance productivity and achieve work-life balance.",
+    arxiv: "https://arxiv.org/abs/2407.12795",
   },
   {
     num: 45,
@@ -52,6 +56,7 @@ const impact: ImpactItem[] = [
     time: "18 July 2024",
     abstract:
       "Insights into building resilience and mental toughness to navigate through life's challenges and setbacks.",
+    arxiv: "https://arxiv.org/abs/2407.12795",
   },
   {
     num: 67,
@@ -61,6 +66,7 @@ const impact: ImpactItem[] = [
     time: "17 July 2024",
     abstract:
       "Exploring the impact of positive thinking on personal success and well-being, backed by scientific research.",
+    arxiv: "https://arxiv.org/abs/2407.12795",
   },
   {
     num: 12,
@@ -70,6 +76,7 @@ const impact: ImpactItem[] = [
     time: "21 July 2024",
     abstract:
       "Essential communication skills for leaders to inspire, motivate, and lead their teams to success.",
+    arxiv: "https://arxiv.org/abs/2407.12795",
   },
   {
     num: 78,
@@ -79,6 +86,7 @@ const impact: ImpactItem[] = [
     time: "20 July 2024",
     abstract:
       "A practical approach to financial planning to secure long-term financial stability and success.",
+    arxiv: "https://arxiv.org/abs/2407.12795",
   },
   {
     num: 34,
@@ -88,6 +96,7 @@ const impact: ImpactItem[] = [
     time: "22 July 2024",
     abstract:
       "Understanding the importance of a growth mindset and how to cultivate it for personal and professional development.",
+    arxiv: "https://arxiv.org/abs/2407.12795",
   },
   {
     num: 58,
@@ -97,6 +106,7 @@ const impact: ImpactItem[] = [
     time: "19 July 2024",
     abstract:
       "Tips and strategies for effective networking to enhance career opportunities and professional growth.",
+    arxiv: "https://arxiv.org/abs/2407.12795",
   },
   {
     num: 6,
@@ -106,6 +116,7 @@ const impact: ImpactItem[] = [
     time: "20 July 2024",
     abstract:
       "Techniques for achieving a healthy work-life balance to maintain well-being and productivity.",
+    arxiv: "https://arxiv.org/abs/2407.12795",
   },
   {
     num: 93,
@@ -115,6 +126,7 @@ const impact: ImpactItem[] = [
     time: "21 July 2024",
     abstract:
       "How to embrace and adapt to change to foster personal growth and seize new opportunities.",
+    arxiv: "https://arxiv.org/abs/2407.12795",
   },
 ];
 
@@ -235,8 +247,18 @@ const Dashboard = () => {
             >
               <h2>{impact[index].title}</h2>
               <h3>{impact[index].time}</h3>
-              <TextGenerateEffect words={impact[index].abstract} />
-              <TextGenerateEffect words={impact[index].authors} />
+              <h2>
+                Arxiv link:
+                <h2 className="text-blue-500">
+                  <Link href={impact[index].arxiv}>
+                    {" "}
+                    {articleJson[index].post_url || articleJson[index].url}
+                  </Link>
+                </h2>
+              </h2>
+              <TextGenerateEffect words={articleJson[index].summary} />
+              author:
+              <h1>{articleJson[index].creator || ""}</h1>
             </div>
             <div className="flex flex-col w-[50rem] gap-5">
               {/* impact bar*/}
