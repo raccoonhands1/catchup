@@ -34,6 +34,8 @@ def get_all_topics():
         output.append(topic)
     return output
 
+def getServerity():
+    return "med"
 
 def add_articles(articles_data):
     # Create Article objects from the provided data
@@ -52,26 +54,40 @@ def add_articles(articles_data):
 
     for topic in topics:
         topic_id = topic['_id']
+        subscribed_users = topic['subscribed_users']
+        subscribed_user_datas = []
+        for user in users: 
+            if user['_id'] in subscribed_users:
+                subscribed_user_datas.append(user)
+
         articles_for_topic = []
         
         for article in articles:
             if topic['name'] in article.topics:
                 articles_for_topic.append(article.to_dict())
 
+        for user in subscribed_user_datas:
+            persona = user["persona"]
+            user_id = str(user['_id'])
+            modified_articles = []
+            for article in articles_for_topic:
+                severity = getServerity(persona, article.summary)
+                article['severity'] = severity
+                modified_articles.append(article)
+            emit('new_articles', {'topic_id': topic_id, 'articles': modified_articles}, room=user_id)
+
+
         if articles_for_topic:  # Only add non-empty lists
             articles_to_add[topic_id] = articles_for_topic
+            
+                
+
 
     for topic_id, articles in articles_to_add.items():
         topics_collection.update_one(
             {'_id': ObjectId(topic_id)},
             {'$push': {'articles': {'$each': articles}}}
         )
-        subscribed_users = []
-        for user in users:
-            if topic_id in user.
-        emit('new_articles', {'topic_id': topic_id, 'articles': articles}, room=topic_id)
-
-    
 
 
     return articles_to_add
