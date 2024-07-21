@@ -6,8 +6,21 @@ from services import topic_service
 topic_bp = Blueprint('topic_bp', __name__)
 
 # Create
-@topic_bp.route('/topic', methods=['POST'])
+@topic_bp.route('/topics', methods=['POST'])
 def add_topic_route():
     data = request.get_json()
     topic_id = topic_service.add_topic(data)
     return jsonify({"result": topic_id}), 201
+
+
+@topic_bp.route("/topic/update", methods=['POST'])
+def update_topics():
+    data = request.get_json()['articles']
+    res = topic_service.add_articles(data)
+    return jsonify({'result': res}), 201
+
+# Read All
+@topic_bp.route('/topics', methods=['GET'])
+def get_topics():
+    topics = topic_service.get_all_topics()
+    return jsonify(topics), 200
