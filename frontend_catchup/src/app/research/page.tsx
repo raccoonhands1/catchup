@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Sidebar, SidebarBody, SidebarLink } from "@/components/sidebar";
 import {
   IconArrowLeft,
@@ -40,6 +40,25 @@ const impact: ImpactItem[] = [
 ];
 
 export default function SidebarDemo() {
+  const [topics, setTopics] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTopics = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/topics"); // Replace with your backend URL
+        const data = await response.json();
+        console.log(data);
+        setTopics(data);
+        setLoading(false);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    fetchTopics();
+  }, []);
+
   const links = [
     {
       label: "Techcrunch",
