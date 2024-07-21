@@ -74,6 +74,8 @@ def getSeverity(type_of_context = "", summaries = []):
     return response_text
     #2 different contexts and similiarities for each context. Market Space and Research
 
+
+#test responses
 changeCompanyContext("user's company is a tech company that specializes in developing software for the gaming industry.")
 changeUserRoleContext("graphics researcher")
 getSeverity("research papers", ["An RTX 3090 GPU is released by NVIDIA with 24GB of GDDR6X memory.", "robotics research concludes that new forms of airplanes are viable", "Halo infinite releases a new DLC and its graphics are powered by Unreal Engine 5 and a new RTX technique", "new elden ring trailer was released with innovative new gameplay design choices", "fallout creation engine disliked by popular concencious"])
