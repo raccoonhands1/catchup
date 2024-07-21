@@ -2,3 +2,4 @@ Flask
 pymongo
 python-dotenv
 cerberus
+flask_socketio
