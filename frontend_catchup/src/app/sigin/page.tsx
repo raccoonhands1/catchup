@@ -8,6 +8,7 @@ import {
   IconBrandGoogle,
   IconBrandLinkedin,
 } from "@tabler/icons-react";
+import Link from "next/link";
 
 export default function SignIn() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -20,7 +21,10 @@ export default function SignIn() {
         👋 Welcome to Catchup!
       </h2>
       <p className="text-neutral-600 text-sm max-w-sm mt-2 dark:text-neutral-300">
-        SignIn to get started with Catchup!
+        Haven&apos;t sign up yet?{" "}
+        <Link href="/signup" className="text-blue-500 font-bold">
+          Sign up
+        </Link>
       </p>
 
       <form className="my-8 " onSubmit={handleSubmit}>

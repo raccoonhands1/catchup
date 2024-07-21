@@ -52,6 +52,7 @@ export default function Navbar() {
               </a>
             ))}
           </div>
+
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
             <a
               href={login.href}
@@ -60,10 +61,13 @@ export default function Navbar() {
               {login.name} <span aria-hidden="true">&rarr;</span>
             </a>
           </div>
-          <Link href="/profile" className="w-min px-2 mx-3">
+          <Link
+            href="/profile"
+            className="w-min px-2 mx-3 hidden lg:flex lg:justify-end"
+          >
             <Avatar>
               <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>Avatar</AvatarFallback>
+              <AvatarFallback>Pic</AvatarFallback>
             </Avatar>
           </Link>
         </nav>
@@ -116,6 +120,12 @@ export default function Navbar() {
                 </div>
               </div>
             </div>
+            <Link href="/profile" className="w-min px-2 mx-3">
+              <Avatar>
+                <AvatarImage src="https://github.com/shadcn.png" />
+                <AvatarFallback>Pic</AvatarFallback>
+              </Avatar>
+            </Link>
           </DialogPanel>
         </Dialog>
       </header>
