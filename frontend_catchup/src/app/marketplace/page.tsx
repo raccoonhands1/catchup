@@ -189,11 +189,6 @@ const Dashboard = () => {
               />
               <TextGenerateEffect words={impact[index].authors} />
             </div>
-            <div className="flex flex-col w-[50rem] gap-5">
-              {/* impact bar*/}
-              <CardDemo />
-              {/* impact bar*/}
-            </div>
           </div>
         ))}
 

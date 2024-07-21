@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/navbar";
+import BackgroundBlurImage from "@/components/background";
 
 export const metadata: Metadata = {
   title: "Catchup!",
@@ -21,7 +22,10 @@ export default function RootLayout({
 
       <body>
         <Navbar />
+
         {children}
+        {/* <BackgroundBlurImage /> */}
+
         {/* <Footer /> */}
       </body>
     </html>

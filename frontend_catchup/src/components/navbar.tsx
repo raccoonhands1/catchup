@@ -10,8 +10,8 @@ import Image from "next/image";
 const navigation = [
   { name: "Home", href: "/" },
   { name: "Research", href: "/research" },
-  { name: "Organization", href: "/organization" },
   { name: "Marketplace", href: "/marketplace" },
+  { name: "Organization", href: "/organization" },
 ];
 const login = { name: "Log in", href: "/sigin" };
 
@@ -23,7 +23,7 @@ export default function Navbar() {
       <header className="inset-x-0 top-0 z-50">
         <nav
           aria-label="Global"
-          className="flex items-center justify-between p-3 lg:px-4"
+          className="flex items-center justify-between p-3 lg:px-4 bg-white"
         >
           <div className="flex lg:flex-1">
             <a href="/" className="-m-1.5 p-1.5">

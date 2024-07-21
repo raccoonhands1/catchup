@@ -32,7 +32,7 @@ import { Textarea } from "@/components/ui/textarea";
 
 export default function profileComponent() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-dvh bg-background rounded-xl">
+    <div className="flex flex-col items-center justify-center min-h-dvh rounded-xl">
       <Card className="w-full max-w-3xl rounded-xl">
         <CardHeader className="bg-muted/20 p-6 flex items-center justify-between">
           <div className="flex items-center gap-4">
