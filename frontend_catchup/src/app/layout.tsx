@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/navbar";
-import BackgroundBlurImage from "@/components/background";
+// import BackgroundBlurImage from "@/components/background";
 
 export const metadata: Metadata = {
   title: "Catchup!",

@@ -3,6 +3,7 @@ import BackgroundBlurImage from "@/components/background";
 export default function Home() {
   return (
     <>
+      <BackgroundBlurImage />
       <Hero />
     </>
   );

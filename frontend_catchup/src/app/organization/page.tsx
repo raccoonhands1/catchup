@@ -52,31 +52,10 @@ const impact: ImpactItem[] = [
 export default function SidebarDemo() {
   const links = [
     {
-      label: "Techcrunch",
+      label: " ",
       href: "#",
       icon: (
         <IconBrandTabler className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-      ),
-    },
-    {
-      label: "BBC",
-      href: "#",
-      icon: (
-        <IconUserBolt className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-      ),
-    },
-    {
-      label: "CNN",
-      href: "#",
-      icon: (
-        <IconSettings className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-      ),
-    },
-    {
-      label: "Hacker News",
-      href: "#",
-      icon: (
-        <IconArrowLeft className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
     },
   ];

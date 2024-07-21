@@ -39,7 +39,7 @@ const impact: ImpactItem[] = [
   //   words: `Add a Button to Trigger the Update: Include a button in the JSX that, when impact.number.`,
   // },
   {
-    num: 40,
+    num: 90,
     url: "https://arxiv.org/abs/2407.12795",
     title: "How to make a button",
     authors:

@@ -62,34 +62,20 @@ export default function profileComponent() {
           <div className="grid gap-2">
             <div className="text-lg font-semibold">About Sundar</div>
             <p className="text-muted-foreground">
-              {/* Sundar is a software engineer with a strong interest in networks
+              Sundar is a software engineer with a strong interest in networks
               and AI. He is passionate about building innovative solutions that
-              push the boundaries of technology. */}
-              <div className="w-full flex flex-col">
-                <Textarea />
-                <button className="min-w-20 h-10 border-2 rounded-xl">
-                  submit
-                </button>
-                {/* comment input and button */}
-              </div>
+              push the boundaries of technology.
             </p>
           </div>
           <Separator />
           <div className="grid gap-2">
             <div className="text-lg font-semibold">About the Company</div>
             <p className="text-muted-foreground">
-              {/* Our company is a leading provider of enterprise-grade software
+              Our company is a leading provider of enterprise-grade software
               solutions. We specialize in developing cutting-edge technologies
               that empower our clients to achieve their business goals. Our team
               of experts is dedicated to delivering exceptional service and
-              driving innovation in the industry. */}
-              <div className="w-full flex flex-col">
-                <Textarea />
-                <button className="min-w-20 h-10 border-2 rounded-xl">
-                  submit
-                </button>
-                {/* comment input and button */}
-              </div>
+              driving innovation in the industry.
             </p>
           </div>
           <Separator />
