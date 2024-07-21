@@ -69,7 +69,12 @@ export default function Navbar() {
             <div className="flex items-center justify-between">
               <a href="#" className="-m-1.5 p-1.5">
                 <span className="sr-only">Catchup</span>
-                <img alt="" src="/catchup_circle.png" className="h-14 w-auto" />
+                <Image
+                  alt=""
+                  src="/catchup_circle.png"
+                  width={50}
+                  height={50}
+                />
               </a>
               <button
                 type="button"
