@@ -1,6 +1,6 @@
 "use client";
 
-import { Search } from "@/components/search";
+import { PlaceholdersAndVanishInput } from "@/components/placeholders-and-vanish-input.tsx";
 import { CardHoverEffectDemo } from "@/components/example-topics";
 export default function Hero() {
   const placeholders = [
@@ -40,7 +40,7 @@ export default function Hero() {
         <h2 className="my-8 sm:mb-20 text-xl text-center sm:text-5xl dark:text-white text-black gap-1">
           Subscribe to networks
         </h2>
-        <Search
+        <PlaceholdersAndVanishInput
           placeholders={placeholders}
           onChange={handleChange}
           onSubmit={onSubmit}
