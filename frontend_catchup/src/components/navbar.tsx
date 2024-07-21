@@ -122,7 +122,7 @@ export default function Navbar() {
             </div>
             <Link href="/profile" className="w-min px-2 mx-3">
               <Avatar>
-                <AvatarImage src="https://github.com/shadcn.png" />
+                <AvatarImage src="/placeholder-user.jpg" />
                 <AvatarFallback>Pic</AvatarFallback>
               </Avatar>
             </Link>
