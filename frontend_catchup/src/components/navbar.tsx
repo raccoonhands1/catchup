@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Link from "next/link";
 import Image from "next/image";
 
 const navigation = [
@@ -11,7 +13,7 @@ const navigation = [
   { name: "Organization", href: "#" },
   { name: "Marketplace", href: "#" },
 ];
-const login = { name: "Profile/Login", href: "/login" };
+const login = { name: "Sign In", href: "/sigin" };
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -58,6 +60,12 @@ export default function Navbar() {
               {login.name} <span aria-hidden="true">&rarr;</span>
             </a>
           </div>
+          <Link href="/profile" className="w-min px-2 mx-3">
+            <Avatar>
+              <AvatarImage src="https://github.com/shadcn.png" />
+              <AvatarFallback>Avatar</AvatarFallback>
+            </Avatar>
+          </Link>
         </nav>
         <Dialog
           open={mobileMenuOpen}

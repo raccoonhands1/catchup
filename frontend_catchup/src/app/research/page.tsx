@@ -23,7 +23,7 @@ interface ImpactItem {
 const impact: ImpactItem[] = [
   {
     num: 10,
-    words: `Oxygen gets you high. In a catastrophic emergency, we're taking giant, panicked breaths. Suddenly you become euphoric, docile. You accept your fate. It's all right here. Emergency water landing, six hundred miles an hour. Blank faces, calm as Hindu cows`,
+    words: `Oxygen gets you high. In a catastrophic emergency, we're taking giant, panicked breaths.`,
   },
   {
     num: 50,
@@ -31,11 +31,11 @@ const impact: ImpactItem[] = [
   },
   {
     num: 90,
-    words: `Add a Button to Trigger the Update: Include a button in the JSX that, when clicked, calls the function to update impact.number.`,
+    words: `Add a Button to Trigger the Update: Include a button in the JSX that, when impact.number.`,
   },
   {
     num: 40,
-    words: `Add a Button to Trigger the Update: Include a button in the JSX that, when clicked, calls the function to update impact.number.`,
+    words: `Calls the function to update impact.number. Add a Button to Trigger the at, when clicked`,
   },
 ];
 
@@ -153,14 +153,14 @@ const Dashboard = () => {
           <div key={index} className="flex gap-2">
             <div
               key={index}
-              className="h-[10rem] w-full p-4 rounded-2xl bg-gray-100 "
+              className="h-[10rem] w-full p-4 rounded-2xl bg-gray-100 inset-1"
             >
               <TextGenerateEffect words={impact[index].words} />
             </div>
             <div key={index} className="w-full p-4 rounded-2xl bg-gray-100">
               {/* <TextGenerateEffect words={words} /> */}
               <div className="flex justify-center w-full pb-2 font-bold">
-                How impactful?
+                How impactful to your startup?
               </div>
               <div className="w-full ">
                 <Progress value={item.num} />
