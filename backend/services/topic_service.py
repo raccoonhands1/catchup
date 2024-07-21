@@ -2,12 +2,9 @@ from db import db
 from schemas import Article, Topic
 from typing import List
 from bson.objectid import ObjectId
-<<<<<<< HEAD
 from severity import getSeverity, changeContext
-=======
 from flask_socketio import emit
 from services import user_service
->>>>>>> cdeb9725327067e6138993bb05cc0618acc304bb
 
 topics_collection = db.topics
 
