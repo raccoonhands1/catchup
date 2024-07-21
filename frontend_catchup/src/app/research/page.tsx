@@ -26,27 +26,95 @@ interface ImpactItem {
   abstract: string;
 }
 const impact: ImpactItem[] = [
-  // {
-  //   num: 10, // value of impact/ severity
-  //   words: `Oxygen gets you high. In a catastrophic emergency, we're taking giant, panicked breaths.`, //summary
-  // },
-  // {
-  //   num: 50,
-  //   words: `This code introduces a button that, when clicked, increments the value of`,
-  // },
-  // {
-  //   num: 90,
-  //   words: `Add a Button to Trigger the Update: Include a button in the JSX that, when impact.number.`,
-  // },
   {
-    num: 90,
-    url: "https://arxiv.org/abs/2407.12795",
-    title: "How to make a button",
-    authors:
-      "Ethan Mollick, Lilach Mollick, Natalie Bach, LJ Ciccarelli, Ben Przystanski, Daniel Ravipinto",
+    num: 23,
+    url: "https://example.com/success/2407.12795",
+    title: "The Art of Setting Achievable Goals",
+    authors: "Jane Doe",
     time: "19 July 2024",
     abstract:
-      "This paper explores the potential of generative AI in creating adaptive educational simulations. By leveraging a system of multiple AI agents, simulations can provide personalized learning experiences, offering students the opportunity to practice skills in scenarios with AI-generated mentors, role-players, and instructor-facing evaluators. We describe a prototype, PitchQuest, a venture capital pitching simulator that showcases the capabilities of AI in delivering instruction, facilitating practice, and providing tailored feedback. The paper discusses the pedagogy behind the simulation, the technology powering it, and the ethical considerations in using AI for education. While acknowledging the limitations and need for rigorous testing, we propose that generative AI can significantly lower the barriers to creating effective, engaging simulations, opening up new possibilities for experiential learning at scale.",
+      "A comprehensive guide on how to set realistic and achievable goals to ensure continuous personal and professional growth.",
+  },
+  {
+    num: 89,
+    url: "https://example.com/success/2407.12800",
+    title: "Mastering Time Management for Optimal Productivity",
+    authors: "John Smith",
+    time: "20 July 2024",
+    abstract:
+      "Strategies and techniques for managing time effectively to enhance productivity and achieve work-life balance.",
+  },
+  {
+    num: 45,
+    url: "https://example.com/success/2407.12801",
+    title: "Building Resilience in Challenging Times",
+    authors: "Emily Johnson",
+    time: "18 July 2024",
+    abstract:
+      "Insights into building resilience and mental toughness to navigate through life's challenges and setbacks.",
+  },
+  {
+    num: 67,
+    url: "https://example.com/success/2407.12802",
+    title: "The Power of Positive Thinking",
+    authors: "Michael Lee",
+    time: "17 July 2024",
+    abstract:
+      "Exploring the impact of positive thinking on personal success and well-being, backed by scientific research.",
+  },
+  {
+    num: 12,
+    url: "https://example.com/success/2407.12803",
+    title: "Effective Communication Skills for Leaders",
+    authors: "Samantha Brown",
+    time: "21 July 2024",
+    abstract:
+      "Essential communication skills for leaders to inspire, motivate, and lead their teams to success.",
+  },
+  {
+    num: 78,
+    url: "https://example.com/success/2407.12804",
+    title: "Financial Planning for Long-term Success",
+    authors: "David White",
+    time: "20 July 2024",
+    abstract:
+      "A practical approach to financial planning to secure long-term financial stability and success.",
+  },
+  {
+    num: 34,
+    url: "https://example.com/success/2407.12805",
+    title: "Developing a Growth Mindset",
+    authors: "Laura Martinez",
+    time: "22 July 2024",
+    abstract:
+      "Understanding the importance of a growth mindset and how to cultivate it for personal and professional development.",
+  },
+  {
+    num: 58,
+    url: "https://example.com/success/2407.12806",
+    title: "The Role of Networking in Career Advancement",
+    authors: "Kevin Thompson",
+    time: "19 July 2024",
+    abstract:
+      "Tips and strategies for effective networking to enhance career opportunities and professional growth.",
+  },
+  {
+    num: 6,
+    url: "https://example.com/success/2407.12807",
+    title: "Balancing Work and Personal Life",
+    authors: "Rachel Green",
+    time: "20 July 2024",
+    abstract:
+      "Techniques for achieving a healthy work-life balance to maintain well-being and productivity.",
+  },
+  {
+    num: 93,
+    url: "https://example.com/success/2407.12808",
+    title: "Embracing Change for Personal Growth",
+    authors: "James Anderson",
+    time: "21 July 2024",
+    abstract:
+      "How to embrace and adapt to change to foster personal growth and seize new opportunities.",
   },
 ];
 
@@ -163,7 +231,7 @@ const Dashboard = () => {
           <div key={index} className="flex gap-2">
             <div
               key={index}
-              className="h-[40rem] w-full p-4 rounded-2xl bg-gray-100 inset-1"
+              className="h-[18rem] w-full p-4 rounded-2xl bg-gray-100 inset-1"
             >
               <h2>{impact[index].title}</h2>
               <h3>{impact[index].time}</h3>

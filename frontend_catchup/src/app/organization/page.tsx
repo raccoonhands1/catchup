@@ -25,27 +25,98 @@ interface ImpactItem {
   abstract: string;
 }
 const impact: ImpactItem[] = [
-  // {
-  //   num: 10, // value of impact/ severity
-  //   words: `Oxygen gets you high. In a catastrophic emergency, we're taking giant, panicked breaths.`, //summary
-  // },
-  // {
-  //   num: 50,
-  //   words: `This code introduces a button that, when clicked, increments the value of`,
-  // },
-  // {
-  //   num: 90,
-  //   words: `Add a Button to Trigger the Update: Include a button in the JSX that, when impact.number.`,
-  // },
   {
-    num: 40,
+    num: 52,
     url: "https://arxiv.org/abs/2407.12795",
-    title: "How to make a button",
-    authors:
-      "Ethan Mollick, Lilach Mollick, Natalie Bach, LJ Ciccarelli, Ben Przystanski, Daniel Ravipinto",
+    title: "So you think you know box shadows?",
+    authors: "Yohannesk",
     time: "19 July 2024",
     abstract:
-      "This paper explores the potential of generative AI in creating adaptive educational simulations. By leveraging a system of multiple AI agents, simulations can provide personalized learning experiences, offering students the opportunity to practice skills in scenarios with AI-generated mentors, role-players, and instructor-facing evaluators. We describe a prototype, PitchQuest, a venture capital pitching simulator that showcases the capabilities of AI in delivering instruction, facilitating practice, and providing tailored feedback. The paper discusses the pedagogy behind the simulation, the technology powering it, and the ethical considerations in using AI for education. While acknowledging the limitations and need for rigorous testing, we propose that generative AI can significantly lower the barriers to creating effective, engaging simulations, opening up new possibilities for experiential learning at scale.",
+      "An in-depth exploration of box shadows in CSS, discussing common misconceptions and advanced techniques for better design.",
+  },
+  {
+    num: 83,
+    url: "https://arxiv.org/abs/2407.12800",
+    title: "Mining JIT traces for missing optimizations with Z3",
+    authors: "Matt D.",
+    time: "20 July 2024",
+    abstract:
+      "A detailed analysis on how to use Z3 to find missing optimizations in Just-In-Time (JIT) compiled code, focusing on improving performance.",
+  },
+  {
+    num: 37,
+    url: "https://arxiv.org/abs/2407.12801",
+    title: "rr – record and replay debugger for C/C++",
+    authors: "Lev Zettelin",
+    time: "18 July 2024",
+    abstract:
+      "An introduction to rr, a debugger for C/C++ that allows recording and replaying of program execution, making debugging more efficient.",
+  },
+  {
+    num: 68,
+    url: "https://arxiv.org/abs/2407.12802",
+    title:
+      "What is the significance of the character 'j' at the end of a Roman Numeral?",
+    authors: "Kamaraju",
+    time: "17 July 2024",
+    abstract:
+      "A historical analysis on the use of the character 'j' in Roman numerals, exploring its origins and significance.",
+  },
+  {
+    num: 91,
+    url: "https://arxiv.org/abs/2407.12803",
+    title:
+      "Atlassian research highlights major disconnect between developers and leaders",
+    authors: "Layer 8",
+    time: "21 July 2024",
+    abstract:
+      "Recent research by Atlassian reveals significant gaps in communication and expectations between software developers and organizational leaders.",
+  },
+  {
+    num: 14,
+    url: "https://arxiv.org/abs/2407.12804",
+    title: "A brief history of Dell Unix",
+    authors: "Fanf2",
+    time: "20 July 2024",
+    abstract:
+      "An overview of the history of Dell's Unix operating system, detailing its development and impact on the tech industry.",
+  },
+  {
+    num: 45,
+    url: "https://arxiv.org/abs/2407.12805",
+    title: "GPG and Me",
+    authors: "Udev4096",
+    time: "22 July 2024",
+    abstract:
+      "A personal account of experiences using GPG for secure communication, discussing challenges and benefits.",
+  },
+  {
+    num: 9,
+    url: "https://arxiv.org/abs/2407.12806",
+    title: "Inkbase: Programmable Ink",
+    authors: "Surprise Talk",
+    time: "19 July 2024",
+    abstract:
+      "An exploration of Inkbase, a technology allowing programmable ink, enabling new forms of digital and physical interactions.",
+  },
+  {
+    num: 29,
+    url: "https://arxiv.org/abs/2407.12807",
+    title: "PgManage: Modern, cross platform graphical database client",
+    authors: "Thunder Bong",
+    time: "20 July 2024",
+    abstract:
+      "Introduction to PgManage, a modern graphical database client that supports multiple platforms, aimed at improving database management.",
+  },
+  {
+    num: 64,
+    url: "https://arxiv.org/abs/2407.12808",
+    title:
+      "Trellis (YC W24) is hiring engineer to build AI-powered ETL for unstructured data",
+    authors: "Trellis Team",
+    time: "21 July 2024",
+    abstract:
+      "Trellis, a YC W24 startup, is looking for engineers to develop AI-powered ETL solutions for handling unstructured data.",
   },
 ];
 
@@ -141,7 +212,7 @@ const Dashboard = () => {
           <div key={index} className="flex gap-2">
             <div
               key={index}
-              className="h-[40rem] w-full p-4 rounded-2xl bg-gray-100 inset-1"
+              className="h-[10rem] w-full p-4 rounded-2xl bg-gray-100 inset-1"
             >
               <h2>{impact[index].title}</h2>
               <h3>{impact[index].time}</h3>
