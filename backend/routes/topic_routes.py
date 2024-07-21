@@ -24,3 +24,23 @@ def update_topics():
 def get_topics():
     topics = topic_service.get_all_topics()
     return jsonify(topics), 200
+
+# Read All reasearch topics
+@topic_bp.route('/research', methods=['GET'])
+def get_topics():
+    topics = topic_service.get_all_topics()
+    my_topics = []
+    for topic in topics:
+        if topic["type"] == "research":
+            my_topics.append(topic)
+    return jsonify(my_topics), 200
+
+# Read All news topics
+@topic_bp.route('/news', methods=['GET'])
+def get_topics():
+    topics = topic_service.get_all_topics()
+    my_topics = []
+    for topic in topics:
+        if topic["type"] == "news":
+            my_topics.append(topic)
+    return jsonify(topics), 200
