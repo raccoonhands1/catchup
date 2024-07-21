@@ -15,9 +15,9 @@ def home():
 
 @socketio.on('join')
 def on_join(data):
-    topic_id = data['topic_id']
-    join_room(topic_id)
-    print(f'Client joined room: {topic_id}')
+    user_id = data['user_id']
+    join_room(user_id)
+    print(f'Client joined room: {user_id}')
 
 if __name__ == '__main__':
     socketio.run(app, debug=True, port=5000)
