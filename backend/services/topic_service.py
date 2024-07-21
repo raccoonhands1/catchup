@@ -2,7 +2,12 @@ from db import db
 from schemas import Article, Topic
 from typing import List
 from bson.objectid import ObjectId
+<<<<<<< HEAD
 from severity import getSeverity, changeContext
+=======
+from flask_socketio import emit
+from services import user_service
+>>>>>>> cdeb9725327067e6138993bb05cc0618acc304bb
 
 topics_collection = db.topics
 
@@ -19,7 +24,6 @@ def add_topic(data) -> str:
     
     topic = Topic(
         name=data['name'],
-        subscribed_users=data['subscribed_users'],
         articles=articles
     )
     
@@ -48,6 +52,7 @@ def add_articles(articles_data):
     ) for article in articles_data]
 
     topics = get_all_topics()
+    users = user_service.get_all_users()
     articles_to_add = {}
 
     for topic in topics:
@@ -66,6 +71,12 @@ def add_articles(articles_data):
             {'_id': ObjectId(topic_id)},
             {'$push': {'articles': {'$each': articles}}}
         )
+        subscribed_users = []
+        for user in users:
+            if topic_id in user.
+        emit('new_articles', {'topic_id': topic_id, 'articles': articles}, room=topic_id)
+
+    
 
     output = []
 

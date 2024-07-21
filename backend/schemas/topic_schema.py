@@ -22,14 +22,12 @@ class Article:
 
 
 class Topic:
-    def __init__(self, name: str, subscribed_users: List[str], articles: List[Article]):
+    def __init__(self, name: str, articles: List[Article]):
         self.name = name
-        self.subscribed_users = subscribed_users
         self.articles = articles
 
     def to_dict(self) -> Dict[str, Any]:
         return {
             "name": self.name,
-            "subscribed_users": self.subscribed_users,
             "articles": [article.to_dict() for article in self.articles]
         }
