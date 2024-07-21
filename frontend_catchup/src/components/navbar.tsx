@@ -10,12 +10,13 @@ const navigation = [
   { name: "Organization", href: "#" },
   { name: "Marketplace", href: "#" },
 ];
+const login = { name: "Profile/Login", href: "/login" };
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <div className="bg-white">
+    <div>
       <header className="inset-x-0 top-0 z-50">
         <nav
           aria-label="Global"
@@ -24,7 +25,7 @@ export default function Navbar() {
           <div className="flex lg:flex-1">
             <a href="/" className="-m-1.5 p-1.5">
               <span className="sr-only">Your Company</span>
-              <img alt="" src="/catchup_circle.png" className="h-8 w-auto" />
+              <img alt="" src="/catchup_circle.png" className="h-14 w-auto" />
             </a>
           </div>
           <div className="flex lg:hidden">
@@ -50,10 +51,10 @@ export default function Navbar() {
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
             <a
-              href="/login "
+              href={login.href}
               className="text-sm font-semibold leading-6 text-gray-900"
             >
-              Log in <span aria-hidden="true">&rarr;</span>
+              {login.name} <span aria-hidden="true">&rarr;</span>
             </a>
           </div>
         </nav>
@@ -63,11 +64,11 @@ export default function Navbar() {
           className="lg:hidden"
         >
           <div className="fixed inset-0 z-50" />
-          <DialogPanel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+          <DialogPanel className="bg-white fixed inset-y-0 right-0 z-50 w-full overflow-y-auto px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
             <div className="flex items-center justify-between">
               <a href="#" className="-m-1.5 p-1.5">
-                <span className="sr-only">Your Company</span>
-                <img alt="" src="/catchup_circle.png" className="h-8 w-auto" />
+                <span className="sr-only">Catchup</span>
+                <img alt="" src="/catchup_circle.png" className="h-14 w-auto" />
               </a>
               <button
                 type="button"
@@ -93,10 +94,10 @@ export default function Navbar() {
                 </div>
                 <div className="py-6">
                   <a
-                    href="#"
+                    href={login.href}
                     className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                   >
-                    Log in
+                    {login.name}
                   </a>
                 </div>
               </div>
