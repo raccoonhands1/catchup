@@ -16,7 +16,8 @@ def add_topic_route():
 @topic_bp.route("/topic/update", methods=['POST'])
 def update_topics():
     data = request.get_json()['articles']
-    res = topic_service.add_articles(data)
+    context = request.get_json()['context']
+    res = topic_service.add_articles(data, context)
     return jsonify({'result': res}), 201
 
 # Read All

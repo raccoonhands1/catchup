@@ -2,8 +2,12 @@ from db import db
 from schemas import Article, Topic
 from typing import List
 from bson.objectid import ObjectId
+<<<<<<< HEAD
+from severity import getSeverity, changeContext
+=======
 from flask_socketio import emit
 from services import user_service
+>>>>>>> cdeb9725327067e6138993bb05cc0618acc304bb
 
 topics_collection = db.topics
 
@@ -45,7 +49,8 @@ def add_articles(articles_data):
         abstract=article['abstract'],
         topics=article['topics'],
         url=article['url'],
-        date=article['date']
+        date=article['date'],
+        # severity=getSeverity("research paper", article['abstract'])
     ) for article in articles_data]
 
     topics = get_all_topics()
@@ -89,5 +94,12 @@ def add_articles(articles_data):
             {'$push': {'articles': {'$each': articles}}}
         )
 
+    output = []
 
-    return articles_to_add
+    changeContext("researcher", "research company")
+    
+    for article in articles:
+        article['severity'] = getSeverity("research paper", article['abstract'])
+        output.append(article)
+
+    return output

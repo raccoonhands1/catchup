@@ -3,3 +3,4 @@ pymongo
 python-dotenv
 cerberus
 flask_socketio
+boto3
