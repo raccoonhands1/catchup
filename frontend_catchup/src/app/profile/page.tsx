@@ -28,11 +28,12 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { JSX, SVGProps } from "react";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function profileComponent() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-dvh bg-background">
-      <Card className="w-full max-w-3xl">
+    <div className="flex flex-col items-center justify-center min-h-dvh bg-background rounded-xl">
+      <Card className="w-full max-w-3xl rounded-xl">
         <CardHeader className="bg-muted/20 p-6 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Avatar className="h-16 w-16">
@@ -48,7 +49,7 @@ export default function profileComponent() {
           </div>
           <div className="flex gap-2">
             <Button variant="outline">
-              <LogInIcon className="mr-2 h-4 w-4" />
+              <LogInIcon className="mr-2 h-4 w-4 " />
               Enterprise Login
             </Button>
             <Button>
@@ -61,20 +62,34 @@ export default function profileComponent() {
           <div className="grid gap-2">
             <div className="text-lg font-semibold">About Sundar</div>
             <p className="text-muted-foreground">
-              Sundar is a software engineer with a strong interest in networks
+              {/* Sundar is a software engineer with a strong interest in networks
               and AI. He is passionate about building innovative solutions that
-              push the boundaries of technology.
+              push the boundaries of technology. */}
+              <div className="w-full flex flex-col">
+                <Textarea />
+                <button className="min-w-20 h-10 border-2 rounded-xl">
+                  submit
+                </button>
+                {/* comment input and button */}
+              </div>
             </p>
           </div>
           <Separator />
           <div className="grid gap-2">
             <div className="text-lg font-semibold">About the Company</div>
             <p className="text-muted-foreground">
-              Our company is a leading provider of enterprise-grade software
+              {/* Our company is a leading provider of enterprise-grade software
               solutions. We specialize in developing cutting-edge technologies
               that empower our clients to achieve their business goals. Our team
               of experts is dedicated to delivering exceptional service and
-              driving innovation in the industry.
+              driving innovation in the industry. */}
+              <div className="w-full flex flex-col">
+                <Textarea />
+                <button className="min-w-20 h-10 border-2 rounded-xl">
+                  submit
+                </button>
+                {/* comment input and button */}
+              </div>
             </p>
           </div>
           <Separator />

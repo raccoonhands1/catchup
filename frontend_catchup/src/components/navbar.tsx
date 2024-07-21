@@ -10,10 +10,10 @@ import Image from "next/image";
 const navigation = [
   { name: "Home", href: "/" },
   { name: "Research", href: "/research" },
-  { name: "Organization", href: "#" },
-  { name: "Marketplace", href: "#" },
+  { name: "Organization", href: "/organization" },
+  { name: "Marketplace", href: "/marketplace" },
 ];
-const login = { name: "Sign In", href: "/sigin" };
+const login = { name: "Log in", href: "/sigin" };
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -66,7 +66,7 @@ export default function Navbar() {
             className="w-min px-2 mx-3 hidden lg:flex lg:justify-end"
           >
             <Avatar>
-              <AvatarImage src="https://github.com/shadcn.png" />
+              <AvatarImage src="/placeholder-user.jpg" />
               <AvatarFallback>Pic</AvatarFallback>
             </Avatar>
           </Link>
@@ -120,7 +120,7 @@ export default function Navbar() {
                 </div>
               </div>
             </div>
-            <Link href="/profile" className="w-min px-2 mx-3">
+            <Link href="/placeholder-user.jpg" className="w-min px-2 mx-3">
               <Avatar>
                 <AvatarImage src="/placeholder-user.jpg" />
                 <AvatarFallback>Pic</AvatarFallback>

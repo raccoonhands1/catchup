@@ -16,7 +16,7 @@ import { IconArrowBigLeftLines } from "@tabler/icons-react";
 import { TextGenerateEffect } from "@/components/text-generate-effect";
 import { Progress } from "@/components/ui/progress";
 import { InputForm } from "@/components/input-form";
-import { Textarea } from "@/components/ui/textarea";
+import { CardDemo } from "@/components/goodCard";
 interface ImpactItem {
   num: number;
   url: string;
@@ -167,40 +167,32 @@ const Dashboard = () => {
             >
               <h2>{impact[index].title}</h2>
               <h3>{impact[index].time}</h3>
-              <TextGenerateEffect words={impact[index].abstract} />
+              <TextGenerateEffect
+                words="
+              1. **Epic: Implement User Authentication System** 
+   - Description: Develop and integrate a secure user authentication system for the application.
+   - User Stories:
+     - As a user, I want to be able to sign up using my email and password.
+     - As a user, I want to log in using my credentials.
+     - As a user, I want to reset my password if I forget it.
+   - Status: Completed
+
+2. **Epic: Migrate Backend Services to Kubernetes**
+   - Description: Transition all backend services to Kubernetes for better scalability and manageability.
+   - User Stories:
+     - As a developer, I want to containerize the existing backend services.
+     - As an operations engineer, I want to deploy services on Kubernetes clusters.
+     - As a team, we need to ensure all services are monitored and logging is enabled.
+   - Status: Completed
+
+              "
+              />
               <TextGenerateEffect words={impact[index].authors} />
             </div>
             <div className="flex flex-col w-[50rem] gap-5">
               {/* impact bar*/}
-              <div
-                key={index}
-                className="w-full h-min p-4 rounded-2xl bg-gray-100 m-1"
-              >
-                {/* <TextGenerateEffect words={words} /> */}
-                <div className="flex justify-center w-full pb-2 font-bold">
-                  How impactful to me?
-                </div>
-                <div className="w-full ">
-                  <Progress value={item.num} />
-                </div>
-              </div>
+              <CardDemo />
               {/* impact bar*/}
-              {/* comment section*/}
-              <div
-                key={index}
-                className="w-full h-min p-4 rounded-2xl bg-gray-100 m-1"
-              >
-                {/* <TextGenerateEffect words={words} /> */}
-
-                <div className="w-full flex flex-col">
-                  <Textarea />
-                  <button className="min-w-20 h-10 border-2 rounded-xl">
-                    submit
-                  </button>
-                  {/* comment input and button */}
-                </div>
-              </div>
-              {/* comment section*/}
             </div>
           </div>
         ))}

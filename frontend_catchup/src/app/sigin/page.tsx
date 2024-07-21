@@ -21,9 +21,9 @@ export default function SignIn() {
         👋 Welcome to Catchup!
       </h2>
       <p className="text-neutral-600 text-sm max-w-sm mt-2 dark:text-neutral-300">
-        Haven&apos;t sign up yet?{" "}
+        Haven&apos;t register yet?{" "}
         <Link href="/signup" className="text-blue-500 font-bold">
-          Sign up
+          Register
         </Link>
       </p>
 
@@ -41,7 +41,7 @@ export default function SignIn() {
           className="bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-xl h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
           type="submit"
         >
-          Sign in &rarr;
+          Log in &rarr;
           <BottomGradient />
         </button>
 

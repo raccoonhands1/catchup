@@ -16,7 +16,6 @@ import { IconArrowBigLeftLines } from "@tabler/icons-react";
 import { TextGenerateEffect } from "@/components/text-generate-effect";
 import { Progress } from "@/components/ui/progress";
 import { InputForm } from "@/components/input-form";
-import { Textarea } from "@/components/ui/textarea";
 interface ImpactItem {
   num: number;
   url: string;
@@ -178,29 +177,13 @@ const Dashboard = () => {
               >
                 {/* <TextGenerateEffect words={words} /> */}
                 <div className="flex justify-center w-full pb-2 font-bold">
-                  How impactful to me?
+                  How impactful to my organization?
                 </div>
                 <div className="w-full ">
                   <Progress value={item.num} />
                 </div>
               </div>
               {/* impact bar*/}
-              {/* comment section*/}
-              <div
-                key={index}
-                className="w-full h-min p-4 rounded-2xl bg-gray-100 m-1"
-              >
-                {/* <TextGenerateEffect words={words} /> */}
-
-                <div className="w-full flex flex-col">
-                  <Textarea />
-                  <button className="min-w-20 h-10 border-2 rounded-xl">
-                    submit
-                  </button>
-                  {/* comment input and button */}
-                </div>
-              </div>
-              {/* comment section*/}
             </div>
           </div>
         ))}

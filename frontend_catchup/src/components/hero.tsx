@@ -2,15 +2,22 @@
 
 import { PlaceholdersAndVanishInput } from "@/components/placeholders-and-vanish-input.tsx";
 import { CardHoverEffectDemo } from "@/components/example-topics";
+import Image from "next/image";
 export default function Hero() {
   const placeholders = [
     //topic names
-    "Franchise",
-    "YCombinator",
-    "TechCrunch",
-    "Wired Magazine",
-    "Bloomberg",
-    "Emily Chang",
+    "AI/ML",
+    "Cancer",
+    "Computer networks",
+    "Data science",
+    "Economics",
+    "Education",
+    "Engineering",
+    "Environment",
+    "Finance",
+    "Health",
+    "History",
+    "Humanities",
   ];
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,14 +38,16 @@ export default function Hero() {
             clipPath:
               "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
           }}
-          className=" left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-gray-100 to-gray-300 opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
+          className=" left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-white opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
         />
       </div>
 
       <div className="h-[40rem] flex flex-col justify-center  items-center px-4">
+        <Image src="/catchup-hero.png" alt="Hero" width={1155} height={678} />
+
         <CardHoverEffectDemo />
         <h2 className="my-8 sm:mb-20 text-xl text-center sm:text-5xl dark:text-white text-black gap-1">
-          Subscribe to networks
+          Subscribe to topics
         </h2>
         <PlaceholdersAndVanishInput
           placeholders={placeholders}
@@ -56,7 +65,7 @@ export default function Hero() {
             clipPath:
               "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
           }}
-          className="relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-gray-100 to-gray-300  opacity-30 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]"
+          className="relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-white opacity-30 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]"
         />
       </div>
     </div>

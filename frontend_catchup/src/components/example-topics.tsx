@@ -9,17 +9,17 @@ export function CardHoverEffectDemo() {
 }
 export const projects = [
   {
-    title: "YCombinator",
+    title: "AI/ML",
     description: "Facebook's mission of bringing the world closer together.",
     link: "https://meta.com",
   },
   {
-    title: "Seqouia Capital",
+    title: "Cancer",
     description: "A multinational technology company focusing on e-commerce.",
     link: "https://amazon.com",
   },
   {
-    title: "Founders Fund",
+    title: "Computer networks",
     description: "Personal computers, and related services.",
     link: "https://microsoft.com",
   },
