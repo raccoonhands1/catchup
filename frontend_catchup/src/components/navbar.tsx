@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Link from "next/link";
 import Image from "next/image";
 
 const navigation = [
@@ -11,7 +13,7 @@ const navigation = [
   { name: "Organization", href: "#" },
   { name: "Marketplace", href: "#" },
 ];
-const login = { name: "Profile/Login", href: "/login" };
+const login = { name: "Sign In", href: "/sigin" };
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -50,6 +52,7 @@ export default function Navbar() {
               </a>
             ))}
           </div>
+
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
             <a
               href={login.href}
@@ -58,6 +61,15 @@ export default function Navbar() {
               {login.name} <span aria-hidden="true">&rarr;</span>
             </a>
           </div>
+          <Link
+            href="/profile"
+            className="w-min px-2 mx-3 hidden lg:flex lg:justify-end"
+          >
+            <Avatar>
+              <AvatarImage src="https://github.com/shadcn.png" />
+              <AvatarFallback>Pic</AvatarFallback>
+            </Avatar>
+          </Link>
         </nav>
         <Dialog
           open={mobileMenuOpen}
@@ -69,7 +81,12 @@ export default function Navbar() {
             <div className="flex items-center justify-between">
               <a href="#" className="-m-1.5 p-1.5">
                 <span className="sr-only">Catchup</span>
-                <img alt="" src="/catchup_circle.png" className="h-14 w-auto" />
+                <Image
+                  alt=""
+                  src="/catchup_circle.png"
+                  width={50}
+                  height={50}
+                />
               </a>
               <button
                 type="button"
@@ -103,6 +120,12 @@ export default function Navbar() {
                 </div>
               </div>
             </div>
+            <Link href="/profile" className="w-min px-2 mx-3">
+              <Avatar>
+                <AvatarImage src="/placeholder-user.jpg" />
+                <AvatarFallback>Pic</AvatarFallback>
+              </Avatar>
+            </Link>
           </DialogPanel>
         </Dialog>
       </header>
