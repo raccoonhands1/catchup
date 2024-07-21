@@ -35,8 +35,8 @@ def get_all_topics():
         output.append(topic)
     return output
 
-def getServerity():
-    return "med"
+# def getServerity():
+#     return "med"
 
 def add_articles(articles_data):
     # Create Article objects from the provided data
@@ -53,6 +53,7 @@ def add_articles(articles_data):
     topics = get_all_topics()
     users = user_service.get_all_users()
     articles_to_add = {}
+    output = []
 
     for topic in topics:
         topic_id = topic['_id']
@@ -73,9 +74,11 @@ def add_articles(articles_data):
             user_id = str(user['_id'])
             modified_articles = []
             for article in articles_for_topic:
-                severity = getServerity(persona, article.summary)
+                severity = getSeverity(persona, article.summary)
                 article['severity'] = severity
                 modified_articles.append(article)
+            
+            output.append(modified_articles)
             emit('new_articles', {'topic_id': topic_id, 'articles': modified_articles}, room=user_id)
 
 
@@ -91,12 +94,12 @@ def add_articles(articles_data):
             {'$push': {'articles': {'$each': articles}}}
         )
 
-    output = []
+    # output = []
 
-    changeContext("researcher", "research company")
+    # changeContext("researcher", "research company")
     
-    for article in articles:
-        article['severity'] = getSeverity("research paper", article['abstract'])
-        output.append(article)
+    # for article in articles:
+    #     article['severity'] = getSeverity("research paper", article['abstract'])
+    #     output.append(article)
 
     return output
