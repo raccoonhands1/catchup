@@ -11,4 +11,4 @@ if not MONGO_URI:
     raise EnvironmentError("MONGO_URI environment variable not set")
 
 client = MongoClient(MONGO_URI)
-db = client.myDatabase
+db = client.catchup
