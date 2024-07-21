@@ -1,12 +1,35 @@
-from cerberus import Validator
-from bson import ObjectId
+from typing import List, Dict, Any
 
-def is_objectid(field, value, error):
-    if not ObjectId.is_valid(value):
-        error(field, "Invalid ObjectId")
+class Article:
+    def __init__(self, title: str, authors: List[str], abstract: str, topics: List[str], url: str, date: str):
+        self.title = title
+        self.authors = authors
+        self.abstract = abstract
+        self.topics = topics
+        self.url = url
+        self.date = date
 
-topic_schema = {
-    'topicname': {'type': 'string', 'minlength': 1, 'required': True},
-    'subscribed_users': {'type': 'list', 'schema': {'type': 'string', 'check_with': is_objectid}, 'required': True},
-    'articles': {'type': 'list', 'schema': {'type': 'string', 'check_with': is_objectid}, 'required': True}
-}
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "title": self.title,
+            "authors": self.authors,
+            "abstract": self.abstract,
+            "topics": self.topics,
+            "url": self.url,
+            "date": self.date
+        }
+
+
+
+class Topic:
+    def __init__(self, name: str, subscribed_users: List[str], articles: List[Article]):
+        self.name = name
+        self.subscribed_users = subscribed_users
+        self.articles = articles
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "name": self.name,
+            "subscribed_users": self.subscribed_users,
+            "articles": [article.to_dict() for article in self.articles]
+        }

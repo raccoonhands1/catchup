@@ -1,11 +1,12 @@
-from cerberus import Validator
-from bson import ObjectId
+class User:
+    def __init__(self, persona: str, email: str, username: str):
+        self.persona = persona
+        self.email = email
+        self.username = username
 
-def is_objectid(field, value, error):
-    if not ObjectId.is_valid(value):
-        error(field, "Invalid ObjectId")
-
-user_schema = {
-    'username': {'type': 'string', 'minlength': 1, 'required': True},
-    'subscribed_topics': {'type': 'list', 'schema': {'type': 'string', 'check_with': is_objectid}, 'required': True}
-}
+    def to_dict(self):
+        return {
+            "persona": self.persona,
+            "username": self.username,
+            "email": self.email
+        }
