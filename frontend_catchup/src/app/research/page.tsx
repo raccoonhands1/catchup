@@ -14,9 +14,30 @@ import { cn } from "@/lib/utils";
 import { Bars3BottomLeftIcon, Bars3Icon } from "@heroicons/react/24/outline";
 import { IconArrowBigLeftLines } from "@tabler/icons-react";
 import { TextGenerateEffect } from "@/components/text-generate-effect";
+import { Progress } from "@/components/ui/progress";
 
-const words = `Oxygen gets you high. In a catastrophic emergency, we're taking giant, panicked breaths. Suddenly you become euphoric, docile. You accept your fate. It's all right here. Emergency water landing, six hundred miles an hour. Blank faces, calm as Hindu cows
-`;
+interface ImpactItem {
+  num: number;
+  words: string;
+}
+const impact: ImpactItem[] = [
+  {
+    num: 10,
+    words: `Oxygen gets you high. In a catastrophic emergency, we're taking giant, panicked breaths. Suddenly you become euphoric, docile. You accept your fate. It's all right here. Emergency water landing, six hundred miles an hour. Blank faces, calm as Hindu cows`,
+  },
+  {
+    num: 50,
+    words: `This code introduces a button that, when clicked, increments the value of`,
+  },
+  {
+    num: 90,
+    words: `Add a Button to Trigger the Update: Include a button in the JSX that, when clicked, calls the function to update impact.number.`,
+  },
+  {
+    num: 40,
+    words: `Add a Button to Trigger the Update: Include a button in the JSX that, when clicked, calls the function to update impact.number.`,
+  },
+];
 
 export default function SidebarDemo() {
   const links = [
@@ -49,6 +70,7 @@ export default function SidebarDemo() {
       ),
     },
   ];
+
   const [open, setOpen] = useState(false);
   return (
     <div
@@ -125,14 +147,29 @@ const Dashboard = () => {
   return (
     <div className="flex flex-1">
       <div className="p-2 md:p-10 rounded-tl-3xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 flex flex-col gap-2 flex-1 w-full h-full">
-        <div className="flex gap-2">
-          <div className="h-min w-full p-4 rounded-2xl bg-gray-100 animate-pulse">
-            <TextGenerateEffect words={words} />
+        {/* boxes */}
+
+        {impact.map((item, index) => (
+          <div key={index} className="flex gap-2">
+            <div
+              key={index}
+              className="h-[10rem] w-full p-4 rounded-2xl bg-gray-100 "
+            >
+              <TextGenerateEffect words={impact[index].words} />
+            </div>
+            <div key={index} className="w-full p-4 rounded-2xl bg-gray-100">
+              {/* <TextGenerateEffect words={words} /> */}
+              <div className="flex justify-center w-full pb-2 font-bold">
+                How impactful?
+              </div>
+              <div className="w-full ">
+                <Progress value={item.num} />
+              </div>
+            </div>
           </div>
-          <div className="h-min w-full p-4 rounded-2xl bg-gray-100 animate-pulse">
-            {/* <TextGenerateEffect words={words} /> */}
-          </div>
-        </div>
+        ))}
+
+        {/* */}
       </div>
     </div>
   );
