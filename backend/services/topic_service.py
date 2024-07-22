@@ -13,7 +13,8 @@ def add_topic(data) -> str:
         abstract=article['abstract'],
         topics=article['topics'],
         url=article['url'],
-        date=article['date']
+        date=article['date'],
+        type=article['type']
     ) for article in articles_data]
     
     topic = Topic(
@@ -42,7 +43,9 @@ def add_articles(articles_data):
         abstract=article['abstract'],
         topics=article['topics'],
         url=article['url'],
-        date=article['date']
+        date=article['date'],
+        type = article['type'],
+
     ) for article in articles_data]
 
     topics = get_all_topics()
