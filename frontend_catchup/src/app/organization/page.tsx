@@ -16,8 +16,6 @@ import { IconArrowBigLeftLines } from "@tabler/icons-react";
 import { TextGenerateEffect } from "@/components/text-generate-effect";
 import { Progress } from "@/components/ui/progress";
 import { InputForm } from "@/components/input-form";
-import { Textarea } from "@/components/ui/textarea";
-import articleJson from "@/lib/articles.json";
 interface ImpactItem {
   num: number;
   url: string;
@@ -25,139 +23,110 @@ interface ImpactItem {
   authors: string;
   time: string;
   abstract: string;
-  arxiv: string;
 }
 const impact: ImpactItem[] = [
   {
-    num: 23,
-    url: "https://example.com/success/2407.12795",
-    title: "The Art of Setting Achievable Goals",
-    authors: "Jane Doe",
+    num: 52,
+    url: "https://arxiv.org/abs/2407.12795",
+    title: "So you think you know box shadows?",
+    authors: "Yohannesk",
     time: "19 July 2024",
     abstract:
-      "A comprehensive guide on how to set realistic and achievable goals to ensure continuous personal and professional growth.",
-    arxiv: "https://arxiv.org/abs/2407.12795",
+      "An in-depth exploration of box shadows in CSS, discussing common misconceptions and advanced techniques for better design.",
   },
   {
-    num: 89,
-    url: "https://example.com/success/2407.12800",
-    title: "Mastering Time Management for Optimal Productivity",
-    authors: "John Smith",
+    num: 83,
+    url: "https://arxiv.org/abs/2407.12800",
+    title: "Mining JIT traces for missing optimizations with Z3",
+    authors: "Matt D.",
     time: "20 July 2024",
     abstract:
-      "Strategies and techniques for managing time effectively to enhance productivity and achieve work-life balance.",
-    arxiv: "https://arxiv.org/abs/2407.12795",
+      "A detailed analysis on how to use Z3 to find missing optimizations in Just-In-Time (JIT) compiled code, focusing on improving performance.",
+  },
+  {
+    num: 37,
+    url: "https://arxiv.org/abs/2407.12801",
+    title: "rr – record and replay debugger for C/C++",
+    authors: "Lev Zettelin",
+    time: "18 July 2024",
+    abstract:
+      "An introduction to rr, a debugger for C/C++ that allows recording and replaying of program execution, making debugging more efficient.",
+  },
+  {
+    num: 68,
+    url: "https://arxiv.org/abs/2407.12802",
+    title:
+      "What is the significance of the character 'j' at the end of a Roman Numeral?",
+    authors: "Kamaraju",
+    time: "17 July 2024",
+    abstract:
+      "A historical analysis on the use of the character 'j' in Roman numerals, exploring its origins and significance.",
+  },
+  {
+    num: 91,
+    url: "https://arxiv.org/abs/2407.12803",
+    title:
+      "Atlassian research highlights major disconnect between developers and leaders",
+    authors: "Layer 8",
+    time: "21 July 2024",
+    abstract:
+      "Recent research by Atlassian reveals significant gaps in communication and expectations between software developers and organizational leaders.",
+  },
+  {
+    num: 14,
+    url: "https://arxiv.org/abs/2407.12804",
+    title: "A brief history of Dell Unix",
+    authors: "Fanf2",
+    time: "20 July 2024",
+    abstract:
+      "An overview of the history of Dell's Unix operating system, detailing its development and impact on the tech industry.",
   },
   {
     num: 45,
-    url: "https://example.com/success/2407.12801",
-    title: "Building Resilience in Challenging Times",
-    authors: "Emily Johnson",
-    time: "18 July 2024",
-    abstract:
-      "Insights into building resilience and mental toughness to navigate through life's challenges and setbacks.",
-    arxiv: "https://arxiv.org/abs/2407.12795",
-  },
-  {
-    num: 67,
-    url: "https://example.com/success/2407.12802",
-    title: "The Power of Positive Thinking",
-    authors: "Michael Lee",
-    time: "17 July 2024",
-    abstract:
-      "Exploring the impact of positive thinking on personal success and well-being, backed by scientific research.",
-    arxiv: "https://arxiv.org/abs/2407.12795",
-  },
-  {
-    num: 12,
-    url: "https://example.com/success/2407.12803",
-    title: "Effective Communication Skills for Leaders",
-    authors: "Samantha Brown",
-    time: "21 July 2024",
-    abstract:
-      "Essential communication skills for leaders to inspire, motivate, and lead their teams to success.",
-    arxiv: "https://arxiv.org/abs/2407.12795",
-  },
-  {
-    num: 78,
-    url: "https://example.com/success/2407.12804",
-    title: "Financial Planning for Long-term Success",
-    authors: "David White",
-    time: "20 July 2024",
-    abstract:
-      "A practical approach to financial planning to secure long-term financial stability and success.",
-    arxiv: "https://arxiv.org/abs/2407.12795",
-  },
-  {
-    num: 34,
-    url: "https://example.com/success/2407.12805",
-    title: "Developing a Growth Mindset",
-    authors: "Laura Martinez",
+    url: "https://arxiv.org/abs/2407.12805",
+    title: "GPG and Me",
+    authors: "Udev4096",
     time: "22 July 2024",
     abstract:
-      "Understanding the importance of a growth mindset and how to cultivate it for personal and professional development.",
-    arxiv: "https://arxiv.org/abs/2407.12795",
+      "A personal account of experiences using GPG for secure communication, discussing challenges and benefits.",
   },
   {
-    num: 58,
-    url: "https://example.com/success/2407.12806",
-    title: "The Role of Networking in Career Advancement",
-    authors: "Kevin Thompson",
+    num: 9,
+    url: "https://arxiv.org/abs/2407.12806",
+    title: "Inkbase: Programmable Ink",
+    authors: "Surprise Talk",
     time: "19 July 2024",
     abstract:
-      "Tips and strategies for effective networking to enhance career opportunities and professional growth.",
-    arxiv: "https://arxiv.org/abs/2407.12795",
+      "An exploration of Inkbase, a technology allowing programmable ink, enabling new forms of digital and physical interactions.",
   },
   {
-    num: 6,
-    url: "https://example.com/success/2407.12807",
-    title: "Balancing Work and Personal Life",
-    authors: "Rachel Green",
+    num: 29,
+    url: "https://arxiv.org/abs/2407.12807",
+    title: "PgManage: Modern, cross platform graphical database client",
+    authors: "Thunder Bong",
     time: "20 July 2024",
     abstract:
-      "Techniques for achieving a healthy work-life balance to maintain well-being and productivity.",
-    arxiv: "https://arxiv.org/abs/2407.12795",
+      "Introduction to PgManage, a modern graphical database client that supports multiple platforms, aimed at improving database management.",
   },
   {
-    num: 93,
-    url: "https://example.com/success/2407.12808",
-    title: "Embracing Change for Personal Growth",
-    authors: "James Anderson",
+    num: 64,
+    url: "https://arxiv.org/abs/2407.12808",
+    title:
+      "Trellis (YC W24) is hiring engineer to build AI-powered ETL for unstructured data",
+    authors: "Trellis Team",
     time: "21 July 2024",
     abstract:
-      "How to embrace and adapt to change to foster personal growth and seize new opportunities.",
-    arxiv: "https://arxiv.org/abs/2407.12795",
+      "Trellis, a YC W24 startup, is looking for engineers to develop AI-powered ETL solutions for handling unstructured data.",
   },
 ];
 
 export default function SidebarDemo() {
   const links = [
     {
-      label: "Techcrunch",
+      label: " ",
       href: "#",
       icon: (
         <IconBrandTabler className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-      ),
-    },
-    {
-      label: "BBC",
-      href: "#",
-      icon: (
-        <IconUserBolt className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-      ),
-    },
-    {
-      label: "CNN",
-      href: "#",
-      icon: (
-        <IconSettings className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-      ),
-    },
-    {
-      label: "Hacker News",
-      href: "#",
-      icon: (
-        <IconArrowLeft className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
     },
   ];
@@ -243,22 +212,12 @@ const Dashboard = () => {
           <div key={index} className="flex gap-2">
             <div
               key={index}
-              className="h-[18rem] w-full p-4 rounded-2xl bg-gray-100 inset-1"
+              className="h-[10rem] w-full p-4 rounded-2xl bg-gray-100 inset-1"
             >
               <h2>{impact[index].title}</h2>
               <h3>{impact[index].time}</h3>
-              <h2>
-                Arxiv link:
-                <h2 className="text-blue-500">
-                  <Link href={impact[index].arxiv}>
-                    {" "}
-                    {articleJson[index].post_url || articleJson[index].url}
-                  </Link>
-                </h2>
-              </h2>
-              <TextGenerateEffect words={articleJson[index].summary} />
-              author:
-              <h1>{articleJson[index].creator || ""}</h1>
+              <TextGenerateEffect words={impact[index].abstract} />
+              <TextGenerateEffect words={impact[index].authors} />
             </div>
             <div className="flex flex-col w-[50rem] gap-5">
               {/* impact bar*/}
@@ -268,29 +227,13 @@ const Dashboard = () => {
               >
                 {/* <TextGenerateEffect words={words} /> */}
                 <div className="flex justify-center w-full pb-2 font-bold">
-                  How impactful to me?
+                  How impactful to my organization?
                 </div>
                 <div className="w-full ">
                   <Progress value={item.num} />
                 </div>
               </div>
               {/* impact bar*/}
-              {/* comment section*/}
-              <div
-                key={index}
-                className="w-full h-min p-4 rounded-2xl bg-gray-100 m-1"
-              >
-                {/* <TextGenerateEffect words={words} /> */}
-
-                <div className="w-full flex flex-col">
-                  <Textarea />
-                  <button className="min-w-20 h-10 border-2 rounded-xl">
-                    submit
-                  </button>
-                  {/* comment input and button */}
-                </div>
-              </div>
-              {/* comment section*/}
             </div>
           </div>
         ))}

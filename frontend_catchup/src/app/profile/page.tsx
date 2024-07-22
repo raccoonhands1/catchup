@@ -28,11 +28,12 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { JSX, SVGProps } from "react";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function profileComponent() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-dvh bg-background">
-      <Card className="w-full max-w-3xl">
+    <div className="flex flex-col items-center justify-center min-h-dvh rounded-xl">
+      <Card className="w-full max-w-3xl rounded-xl">
         <CardHeader className="bg-muted/20 p-6 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Avatar className="h-16 w-16">
@@ -48,7 +49,7 @@ export default function profileComponent() {
           </div>
           <div className="flex gap-2">
             <Button variant="outline">
-              <LogInIcon className="mr-2 h-4 w-4" />
+              <LogInIcon className="mr-2 h-4 w-4 " />
               Enterprise Login
             </Button>
             <Button>
