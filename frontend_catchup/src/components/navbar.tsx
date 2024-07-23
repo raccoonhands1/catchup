@@ -6,6 +6,13 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 import Image from "next/image";
+import {
+  ClerkProvider,
+  SignInButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from "@clerk/nextjs";
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -52,24 +59,16 @@ export default function Navbar() {
               </a>
             ))}
           </div>
+          {/*Login */}
 
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a
-              href={login.href}
-              className="text-sm font-semibold leading-6 text-gray-900"
-            >
-              {login.name} <span aria-hidden="true">&rarr;</span>
-            </a>
+            <SignedOut>
+              <SignInButton />
+            </SignedOut>
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
           </div>
-          <Link
-            href="/profile"
-            className="w-min px-2 mx-3 hidden lg:flex lg:justify-end"
-          >
-            <Avatar>
-              <AvatarImage src="/placeholder-user.jpg" />
-              <AvatarFallback>Pic</AvatarFallback>
-            </Avatar>
-          </Link>
         </nav>
         <Dialog
           open={mobileMenuOpen}
@@ -110,22 +109,22 @@ export default function Navbar() {
                     </a>
                   ))}
                 </div>
-                <div className="py-6">
+                <SignedOut>
+                  <SignInButton />
+                </SignedOut>
+                <SignedIn>
+                  <UserButton />
+                </SignedIn>
+                {/* <div className="py-6">
                   <a
                     href={login.href}
                     className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                   >
                     {login.name}
                   </a>
-                </div>
+                </div> */}
               </div>
             </div>
-            <Link href="/placeholder-user.jpg" className="w-min px-2 mx-3">
-              <Avatar>
-                <AvatarImage src="/placeholder-user.jpg" />
-                <AvatarFallback>Pic</AvatarFallback>
-              </Avatar>
-            </Link>
           </DialogPanel>
         </Dialog>
       </header>

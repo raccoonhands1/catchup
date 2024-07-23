@@ -4,12 +4,9 @@ import Link, { LinkProps } from "next/link";
 import React, { useState, createContext, useContext } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { IconArrowBigLeftLines, IconX } from "@tabler/icons-react";
+import { ToastAction } from "@/components/ui/toast";
 
-interface Links {
-  label: string;
-  href: string;
-  icon: React.JSX.Element | React.ReactNode;
-}
+import { toast, useToast } from "@/components/ui/use-toast";
 
 interface SidebarContextProps {
   open: boolean;
@@ -152,22 +149,20 @@ export const MobileSidebar = ({
 };
 
 export const SidebarLink = ({
-  link,
+  label,
   className,
   ...props
 }: {
-  link: Links;
+  label: string;
   className?: string;
-  props?: LinkProps;
+  props?: string;
 }) => {
   const { open } = useSidebar();
+  const { toast } = useToast();
+
   return (
-    <Link
-      href={link.href}
-      className={cn(
-        "flex items-center justify-start gap-2 group/sidebar py-2",
-        className
-      )}
+    <div
+      className={cn("flex items-center justify-start py-2", className)}
       {...props}
     >
       {/* {link.icon} */}
@@ -179,8 +174,22 @@ export const SidebarLink = ({
         }}
         className="text-neutral-700 dark:text-neutral-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0"
       >
-        {link.label}
+        <div className="flex w-[15rem] justify-between items-center text-base">
+          <span className="group-hover/modal-btn:translate-x-40 text-center transition duration-500">
+            {label}
+          </span>
+          <button
+            onClick={() =>
+              toast({
+                description: "You have subscribed to the topic",
+              })
+            }
+            className="bg-gray-700 rounded-md text-white p-2"
+          >
+            Subscribe
+          </button>
+        </div>
       </motion.span>
-    </Link>
+    </div>
   );
 };
