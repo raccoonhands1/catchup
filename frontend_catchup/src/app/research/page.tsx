@@ -326,7 +326,7 @@ const Dashboard = () => {
                     <h3 className="text-sm text-slate-500">{comment.time}</h3>
 
                     <svg
-                      className="ml-auto justify-right mr-2 cursor-pointer h-5 w-5"
+                      className="mr-auto justify-right mt-2 cursor-pointer h-5 w-5"
                       viewBox="0 0 1024 1024"
                       fill="currentColor"
                       height="1em"
