@@ -27,6 +27,36 @@ interface ImpactItem {
   abstract: string;
   arxiv: string;
 }
+
+interface Comment {
+
+  text: string;
+  author: string;
+  time: string;
+  likes: number;
+}
+
+const comments: Comment[] = [
+  {
+    text: "This is a great article!",
+    author: "John Doe",
+    time: "2 hours ago",
+    likes: 10,
+  },
+  {
+    text: "I found this very insightful.",
+    author: "Jane Smith",
+    time: "1 hour ago",
+    likes: 5,
+  },
+  {
+    text: "Thanks for sharing this information.",
+    author: "Michael Johnson",
+    time: "30 minutes ago",
+    likes: 3,
+  },
+];
+
 const impact: ImpactItem[] = [
   {
     num: 23,
@@ -236,7 +266,7 @@ const LogoIcon = () => {
 const Dashboard = () => {
   return (
     <div className="flex flex-1">
-      <div className="p-2 md:p-10 rounded-tl-3xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 flex flex-col gap-2 flex-1 w-full">
+      <div className="p-2 md:p-10 rounded-3xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 flex flex-col gap-2 h-screen overflow-scroll">
         {/* boxes */}
 
         {impact.map((item, index) => (
@@ -245,58 +275,63 @@ const Dashboard = () => {
               key={index}
               className="h-[18rem] w-full p-4 rounded-2xl bg-gray-100 inset-1"
             >
-              <h2>{impact[index].title}</h2>
-              <h3>{impact[index].time}</h3>
+              <h2 className="text-2xl font-semibold">{item.title}</h2>
+              <h3 className="text-slate-500">{item.time}</h3>
               <h2>
                 Arxiv link:
-                <h2 className="text-blue-500">
+                <div className="text-blue-500">
                   <Link href={impact[index].arxiv}>
                     {" "}
                     {articleJson[index].post_url || articleJson[index].url}
                   </Link>
-                </h2>
+                </div>
               </h2>
               <TextGenerateEffect words={articleJson[index].summary} />
               author:
               <h1>{articleJson[index].creator || ""}</h1>
-            </div>
-            <div className="flex flex-col w-[50rem] gap-5">
-              {/* impact bar*/}
-              <div
-                key={index}
-                className="w-full h-min p-4 rounded-2xl bg-gray-100 m-1"
-              >
-                {/* <TextGenerateEffect words={words} /> */}
-                <div className="flex justify-center w-full pb-2 font-bold">
-                  How impactful to me?
-                </div>
-                <div className="w-full ">
-                  <Progress value={item.num} />
-                </div>
-              </div>
-              {/* impact bar*/}
-              {/* comment section*/}
-              <div
-                key={index}
-                className="w-full h-min p-4 rounded-2xl bg-gray-100 m-1"
-              >
-                {/* <TextGenerateEffect words={words} /> */}
-
-                <div className="w-full flex flex-col">
-                  <Textarea />
-                  <button className="min-w-20 h-10 border-2 rounded-xl">
-                    submit
-                  </button>
-                  {/* comment input and button */}
-                </div>
-              </div>
-              {/* comment section*/}
             </div>
           </div>
         ))}
 
         {/* */}
       </div>
+
+
+      {/* comments area */}
+      <div className="flex bg-transparent gap-5 h-full w-[50rem]">    
+          <div className="p-2 md:pt-6 md:pl-8 md:pr-8 rounded-tl-3xl rounded-l-3xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 flex flex-col flex-1">
+            <div className="flex flex-1 flex-col gap-2">
+              <h1 className="font-semibold text-lg">
+                comments
+              </h1>
+              <hr className="my-2 border-t-2 border-neutral-200 dark:border-neutral-700 w-full" />
+
+              {comments.map((comment, index) => (
+                <div key={index} className="flex gap-2">
+                  <div
+                    key={index}
+                    className="w-full p-4 rounded-xl bg-gray-100 inset-1"
+                  >
+                    <h1 className="font-semibold text-xs">{comment.author}</h1>
+                    <h2 className="">{comment.text}</h2>
+                    <h3 className="text-sm text-slate-500">{comment.time}</h3>
+                  </div>
+                </div>
+
+              ))}
+            </div>
+            <div className="inset-x-0 flex-row flex bottom-0">
+              <input 
+                placeholder="    add a comment..." 
+                className="border-lg border-black bg-gray-200 min-h-10 rounded-2xl flex-1">
+              </input>
+              <button className="bg-blue-500 rounded-2xl font-semibold px-8 text-white py-2 ">
+                post
+              </button>
+            </div>
+          </div>
+      </div>
+      {/* end of comments area */}
     </div>
   );
 };
