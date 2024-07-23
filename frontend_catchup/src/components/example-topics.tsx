@@ -11,16 +11,16 @@ export const projects = [
   {
     title: "AI/ML",
     description: "Facebook's mission of bringing the world closer together.",
-    link: "https://meta.com",
+    link: "#",
   },
   {
     title: "Cancer",
     description: "A multinational technology company focusing on e-commerce.",
-    link: "https://amazon.com",
+    link: "#",
   },
   {
     title: "Computer networks",
     description: "Personal computers, and related services.",
-    link: "https://microsoft.com",
+    link: "#",
   },
 ];
