@@ -18,6 +18,16 @@ import { Progress } from "@/components/ui/progress";
 import { InputForm } from "@/components/input-form";
 import { Textarea } from "@/components/ui/textarea";
 import articleJson from "@/lib/articles.json";
+
+interface Comment {
+
+  text: string;
+  author: string;
+  time: string;
+  likes: number;
+  position: string;
+}
+
 interface ImpactItem {
   num: number;
   url: string;
@@ -28,13 +38,6 @@ interface ImpactItem {
   arxiv: string;
 }
 
-interface Comment {
-
-  text: string;
-  author: string;
-  time: string;
-  likes: number;
-}
 
 const comments: Comment[] = [
   {
@@ -42,18 +45,21 @@ const comments: Comment[] = [
     author: "John Doe",
     time: "2 hours ago",
     likes: 10,
+    position: "Marketing",
   },
   {
     text: "I found this very insightful.",
     author: "Jane Smith",
     time: "1 hour ago",
     likes: 5,
+    position: "UI/UX Designer",
   },
   {
     text: "Thanks for sharing this information.",
     author: "Michael Johnson",
     time: "30 minutes ago",
     likes: 3,
+    position: "Developer",
   },
 ];
 
@@ -302,7 +308,7 @@ const Dashboard = () => {
           <div className="p-2 md:pt-6 md:pl-8 md:pr-8 rounded-tl-3xl rounded-l-3xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 flex flex-col flex-1">
             <div className="flex flex-1 flex-col gap-2">
               <h1 className="font-semibold text-lg">
-                comments
+                discussion
               </h1>
               <hr className="my-2 border-t-2 border-neutral-200 dark:border-neutral-700 w-full" />
 
@@ -312,7 +318,10 @@ const Dashboard = () => {
                     key={index}
                     className="w-full p-4 rounded-xl bg-gray-100 inset-1"
                   >
-                    <h1 className="font-semibold text-xs">{comment.author}</h1>
+                    <div className="flex-row flex items-center">
+                      <h1 className="font-semibold text-sm">{comment.author}</h1>
+                      <h1 className="text-xs px-1 text-slate-500 ">{" • " + comment.position}</h1>
+                    </div>
                     <h2 className="">{comment.text}</h2>
                     <h3 className="text-sm text-slate-500">{comment.time}</h3>
                   </div>
