@@ -1,87 +1,25 @@
 "use client";
 import React, { useState } from "react";
 import { Sidebar, SidebarBody, SidebarLink } from "@/components/sidebar";
-import {
-  IconArrowLeft,
-  IconBrandTabler,
-  IconSettings,
-  IconUserBolt,
-} from "@tabler/icons-react";
+import { IconBook2 } from "@tabler/icons-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Bars3BottomLeftIcon, Bars3Icon } from "@heroicons/react/24/outline";
 import { IconArrowBigLeftLines } from "@tabler/icons-react";
 import { TextGenerateEffect } from "@/components/text-generate-effect";
-import { Progress } from "@/components/ui/progress";
 import { InputForm } from "@/components/input-form";
-import { CardDemo } from "@/components/goodCard";
-interface ImpactItem {
-  num: number;
-  url: string;
-  title: string;
-  authors: string;
-  time: string;
-  abstract: string;
-}
-const impact: ImpactItem[] = [
-  // {
-  //   num: 10, // value of impact/ severity
-  //   words: `Oxygen gets you high. In a catastrophic emergency, we're taking giant, panicked breaths.`, //summary
-  // },
-  // {
-  //   num: 50,
-  //   words: `This code introduces a button that, when clicked, increments the value of`,
-  // },
-  // {
-  //   num: 90,
-  //   words: `Add a Button to Trigger the Update: Include a button in the JSX that, when impact.number.`,
-  // },
-  {
-    num: 40,
-    url: "https://arxiv.org/abs/2407.12795",
-    title: "How to make a button",
-    authors:
-      "Ethan Mollick, Lilach Mollick, Natalie Bach, LJ Ciccarelli, Ben Przystanski, Daniel Ravipinto",
-    time: "19 July 2024",
-    abstract:
-      "This paper explores the potential of generative AI in creating adaptive educational simulations. By leveraging a system of multiple AI agents, simulations can provide personalized learning experiences, offering students the opportunity to practice skills in scenarios with AI-generated mentors, role-players, and instructor-facing evaluators. We describe a prototype, PitchQuest, a venture capital pitching simulator that showcases the capabilities of AI in delivering instruction, facilitating practice, and providing tailored feedback. The paper discusses the pedagogy behind the simulation, the technology powering it, and the ethical considerations in using AI for education. While acknowledging the limitations and need for rigorous testing, we propose that generative AI can significantly lower the barriers to creating effective, engaging simulations, opening up new possibilities for experiential learning at scale.",
-  },
-];
+import { Textarea } from "@/components/ui/textarea";
+import articleJson from "@/lib/articles.json";
+
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 export default function SidebarDemo() {
-  const links = [
-    {
-      label: "Techcrunch",
-      href: "#",
-      icon: (
-        <IconBrandTabler className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-      ),
-    },
-    {
-      label: "BBC",
-      href: "#",
-      icon: (
-        <IconUserBolt className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-      ),
-    },
-    {
-      label: "CNN",
-      href: "#",
-      icon: (
-        <IconSettings className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-      ),
-    },
-    {
-      label: "Hacker News",
-      href: "#",
-      icon: (
-        <IconArrowLeft className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-      ),
-    },
-  ];
-
   const [open, setOpen] = useState(false);
   return (
     <div
@@ -90,32 +28,19 @@ export default function SidebarDemo() {
       )}
     >
       <Sidebar open={open} setOpen={setOpen}>
-        <SidebarBody className="justify-between gap-10">
+        <SidebarBody className="justify-between gap-20 ">
           <div className="flex flex-col flex-1 overflow-y-auto">
             {open ? <Logo /> : <LogoIcon />}
             <div className="mt-8 flex flex-col gap-2">
-              {links.map((link, idx) => (
-                <SidebarLink key={idx} link={link} />
+              {articleJson.map((tags, idx) => (
+                <SidebarLink
+                  key={idx}
+                  label={articleJson[idx].tags[0]}
+                  className=" rounded-xl p-1 flex"
+                />
               ))}
             </div>
           </div>
-          {/* <div>
-            <SidebarLink
-              link={{
-                label: "",
-                href: "#",
-                icon: (
-                  <Image
-                    src="https://assets.aceternity.com/manu.png"
-                    className="h-7 w-7 flex-shrink-0 rounded-full"
-                    width={50}
-                    height={50}
-                    alt="Avatar"
-                  />
-                ),
-              }}
-            />
-          </div> */}
         </SidebarBody>
       </Sidebar>
       <Dashboard />
@@ -128,7 +53,6 @@ const Logo = () => {
       href="#"
       className="font-normal flex space-x-2 items-center text-sm  py-1 relative z-20"
     >
-      {/* <div className="h-5 w-6 bg-black dark:bg-white rounded-br-lg rounded-tr-sm rounded-tl-lg rounded-bl-sm flex-shrink-0" /> */}
       <IconArrowBigLeftLines stroke={1.5} className="h-6 w-6" />
       <motion.span
         initial={{ opacity: 0 }}
@@ -146,7 +70,6 @@ const LogoIcon = () => {
       href="#"
       className="font-normal flex space-x-2 items-center text-sm text-black py-1 relative z-20"
     >
-      {/* <div className="h-5 w-6 bg-black dark:bg-white rounded-br-lg rounded-tr-sm rounded-tl-lg rounded-bl-sm flex-shrink-0" /> */}
       <Bars3BottomLeftIcon aria-hidden="true" className="h-6 w-6" />
     </Link>
   );
@@ -159,7 +82,7 @@ const Dashboard = () => {
       <div className="p-2 md:p-10 rounded-tl-3xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 flex flex-col gap-2 flex-1 w-full">
         {/* boxes */}
 
-        {impact.map((item, index) => (
+        {articleJson.map((item, index) => (
           <div key={index} className="flex gap-2">
             <div
               key={index}

@@ -1,7 +1,15 @@
 import { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/navbar";
-// import BackgroundBlurImage from "@/components/background";
+import { Toaster } from "@/components/ui/toaster";
+
+import {
+  ClerkProvider,
+  SignInButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from "@clerk/nextjs";
 
 export const metadata: Metadata = {
   title: "Catchup!",
@@ -14,20 +22,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <meta charSet="utf-8" />
-      <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <ClerkProvider>
+      <html lang="en">
+        <meta charSet="utf-8" />
+        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
 
-      <body>
-        <Navbar />
+        <body>
+          <Toaster />
 
-        {children}
-        {/* <BackgroundBlurImage /> */}
+          <Navbar />
 
-        {/* <Footer /> */}
-      </body>
-    </html>
+          {children}
+
+          {/* <Footer /> */}
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

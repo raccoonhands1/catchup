@@ -46,6 +46,7 @@ export default function Hero() {
         <Image src="/catchup-hero.png" alt="Hero" width={1155} height={678} />
 
         <CardHoverEffectDemo />
+
         <h2 className="my-8 sm:mb-20 text-xl text-center sm:text-5xl dark:text-white text-black gap-1">
           Subscribe to topics
         </h2>

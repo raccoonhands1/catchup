@@ -6,6 +6,13 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 import Image from "next/image";
+import {
+  ClerkProvider,
+  SignInButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from "@clerk/nextjs";
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -120,12 +127,12 @@ export default function Navbar() {
                 </div>
               </div>
             </div>
-            <Link href="/placeholder-user.jpg" className="w-min px-2 mx-3">
-              <Avatar>
-                <AvatarImage src="/placeholder-user.jpg" />
-                <AvatarFallback>Pic</AvatarFallback>
-              </Avatar>
-            </Link>
+            <SignedOut>
+              <SignInButton />
+            </SignedOut>
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
           </DialogPanel>
         </Dialog>
       </header>

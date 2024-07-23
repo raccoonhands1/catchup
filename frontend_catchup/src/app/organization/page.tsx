@@ -1,136 +1,25 @@
 "use client";
 import React, { useState } from "react";
 import { Sidebar, SidebarBody, SidebarLink } from "@/components/sidebar";
-import {
-  IconArrowLeft,
-  IconBrandTabler,
-  IconSettings,
-  IconUserBolt,
-} from "@tabler/icons-react";
+import { IconBook2 } from "@tabler/icons-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Bars3BottomLeftIcon, Bars3Icon } from "@heroicons/react/24/outline";
 import { IconArrowBigLeftLines } from "@tabler/icons-react";
 import { TextGenerateEffect } from "@/components/text-generate-effect";
-import { Progress } from "@/components/ui/progress";
 import { InputForm } from "@/components/input-form";
-interface ImpactItem {
-  num: number;
-  url: string;
-  title: string;
-  authors: string;
-  time: string;
-  abstract: string;
-}
-const impact: ImpactItem[] = [
-  {
-    num: 52,
-    url: "https://arxiv.org/abs/2407.12795",
-    title: "So you think you know box shadows?",
-    authors: "Yohannesk",
-    time: "19 July 2024",
-    abstract:
-      "An in-depth exploration of box shadows in CSS, discussing common misconceptions and advanced techniques for better design.",
-  },
-  {
-    num: 83,
-    url: "https://arxiv.org/abs/2407.12800",
-    title: "Mining JIT traces for missing optimizations with Z3",
-    authors: "Matt D.",
-    time: "20 July 2024",
-    abstract:
-      "A detailed analysis on how to use Z3 to find missing optimizations in Just-In-Time (JIT) compiled code, focusing on improving performance.",
-  },
-  {
-    num: 37,
-    url: "https://arxiv.org/abs/2407.12801",
-    title: "rr – record and replay debugger for C/C++",
-    authors: "Lev Zettelin",
-    time: "18 July 2024",
-    abstract:
-      "An introduction to rr, a debugger for C/C++ that allows recording and replaying of program execution, making debugging more efficient.",
-  },
-  {
-    num: 68,
-    url: "https://arxiv.org/abs/2407.12802",
-    title:
-      "What is the significance of the character 'j' at the end of a Roman Numeral?",
-    authors: "Kamaraju",
-    time: "17 July 2024",
-    abstract:
-      "A historical analysis on the use of the character 'j' in Roman numerals, exploring its origins and significance.",
-  },
-  {
-    num: 91,
-    url: "https://arxiv.org/abs/2407.12803",
-    title:
-      "Atlassian research highlights major disconnect between developers and leaders",
-    authors: "Layer 8",
-    time: "21 July 2024",
-    abstract:
-      "Recent research by Atlassian reveals significant gaps in communication and expectations between software developers and organizational leaders.",
-  },
-  {
-    num: 14,
-    url: "https://arxiv.org/abs/2407.12804",
-    title: "A brief history of Dell Unix",
-    authors: "Fanf2",
-    time: "20 July 2024",
-    abstract:
-      "An overview of the history of Dell's Unix operating system, detailing its development and impact on the tech industry.",
-  },
-  {
-    num: 45,
-    url: "https://arxiv.org/abs/2407.12805",
-    title: "GPG and Me",
-    authors: "Udev4096",
-    time: "22 July 2024",
-    abstract:
-      "A personal account of experiences using GPG for secure communication, discussing challenges and benefits.",
-  },
-  {
-    num: 9,
-    url: "https://arxiv.org/abs/2407.12806",
-    title: "Inkbase: Programmable Ink",
-    authors: "Surprise Talk",
-    time: "19 July 2024",
-    abstract:
-      "An exploration of Inkbase, a technology allowing programmable ink, enabling new forms of digital and physical interactions.",
-  },
-  {
-    num: 29,
-    url: "https://arxiv.org/abs/2407.12807",
-    title: "PgManage: Modern, cross platform graphical database client",
-    authors: "Thunder Bong",
-    time: "20 July 2024",
-    abstract:
-      "Introduction to PgManage, a modern graphical database client that supports multiple platforms, aimed at improving database management.",
-  },
-  {
-    num: 64,
-    url: "https://arxiv.org/abs/2407.12808",
-    title:
-      "Trellis (YC W24) is hiring engineer to build AI-powered ETL for unstructured data",
-    authors: "Trellis Team",
-    time: "21 July 2024",
-    abstract:
-      "Trellis, a YC W24 startup, is looking for engineers to develop AI-powered ETL solutions for handling unstructured data.",
-  },
-];
+import { Textarea } from "@/components/ui/textarea";
+import articleJson from "@/lib/articles.json";
+
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 export default function SidebarDemo() {
-  const links = [
-    {
-      label: " ",
-      href: "#",
-      icon: (
-        <IconBrandTabler className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-      ),
-    },
-  ];
-
   const [open, setOpen] = useState(false);
   return (
     <div
@@ -139,32 +28,19 @@ export default function SidebarDemo() {
       )}
     >
       <Sidebar open={open} setOpen={setOpen}>
-        <SidebarBody className="justify-between gap-10">
+        <SidebarBody className="justify-between gap-20 ">
           <div className="flex flex-col flex-1 overflow-y-auto">
             {open ? <Logo /> : <LogoIcon />}
             <div className="mt-8 flex flex-col gap-2">
-              {links.map((link, idx) => (
-                <SidebarLink key={idx} link={link} />
+              {articleJson.map((tags, idx) => (
+                <SidebarLink
+                  key={idx}
+                  label={articleJson[idx].tags[0]}
+                  className=" rounded-xl p-1 flex"
+                />
               ))}
             </div>
           </div>
-          {/* <div>
-            <SidebarLink
-              link={{
-                label: "",
-                href: "#",
-                icon: (
-                  <Image
-                    src="https://assets.aceternity.com/manu.png"
-                    className="h-7 w-7 flex-shrink-0 rounded-full"
-                    width={50}
-                    height={50}
-                    alt="Avatar"
-                  />
-                ),
-              }}
-            />
-          </div> */}
         </SidebarBody>
       </Sidebar>
       <Dashboard />
@@ -177,7 +53,6 @@ const Logo = () => {
       href="#"
       className="font-normal flex space-x-2 items-center text-sm  py-1 relative z-20"
     >
-      {/* <div className="h-5 w-6 bg-black dark:bg-white rounded-br-lg rounded-tr-sm rounded-tl-lg rounded-bl-sm flex-shrink-0" /> */}
       <IconArrowBigLeftLines stroke={1.5} className="h-6 w-6" />
       <motion.span
         initial={{ opacity: 0 }}
@@ -195,7 +70,6 @@ const LogoIcon = () => {
       href="#"
       className="font-normal flex space-x-2 items-center text-sm text-black py-1 relative z-20"
     >
-      {/* <div className="h-5 w-6 bg-black dark:bg-white rounded-br-lg rounded-tr-sm rounded-tl-lg rounded-bl-sm flex-shrink-0" /> */}
       <Bars3BottomLeftIcon aria-hidden="true" className="h-6 w-6" />
     </Link>
   );
@@ -206,34 +80,63 @@ const Dashboard = () => {
   return (
     <div className="flex flex-1">
       <div className="p-2 md:p-10 rounded-tl-3xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 flex flex-col gap-2 flex-1 w-full">
-        {/* boxes */}
+        {/* summary boxes */}
 
-        {impact.map((item, index) => (
+        {articleJson.map((item, index) => (
           <div key={index} className="flex gap-2">
             <div
               key={index}
-              className="h-[10rem] w-full p-4 rounded-2xl bg-gray-100 inset-1"
+              className="lg:w-full p-4 rounded-2xl bg-gray-100 border-2"
             >
-              <h2>{impact[index].title}</h2>
-              <h3>{impact[index].time}</h3>
-              <TextGenerateEffect words={impact[index].abstract} />
-              <TextGenerateEffect words={impact[index].authors} />
-            </div>
-            <div className="flex flex-col w-[50rem] gap-5">
-              {/* impact bar*/}
-              <div
-                key={index}
-                className="w-full h-min p-4 rounded-2xl bg-gray-100 m-1"
-              >
-                {/* <TextGenerateEffect words={words} /> */}
-                <div className="flex justify-center w-full pb-2 font-bold">
-                  How impactful to my organization?
-                </div>
-                <div className="w-full ">
-                  <Progress value={item.num} />
+              <div className="flex justify-between pr-10">
+                <h2 className="font-bold">{articleJson[index].title}</h2>
+                <div className="flex  items-center p-1 gap-2 ">
+                  <h2 className="border border-black uppercase px-2 py-1 rounded-md bg-blue-500 text-white">
+                    {articleJson[index].type}
+                  </h2>
+                  <h2 className="border border-black uppercase px-2 py-1 rounded-md bg-green-500 text-white">
+                    LOW
+                  </h2>
                 </div>
               </div>
-              {/* impact bar*/}
+
+              <Accordion type="single" collapsible>
+                <AccordionItem value="item-1">
+                  <AccordionTrigger className="text-sm">
+                    Read more
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <h3>{articleJson[index].time}</h3>
+                    <TextGenerateEffect words={articleJson[index].summary} />
+                    <div className="flex gap-1 mt-4">
+                      <h1>author:</h1>
+                      <h1>{articleJson[index].creator || ""}</h1>{" "}
+                    </div>
+                    <div className="flex gap-1">
+                      Arxiv link:
+                      <h2 className="text-blue-500">
+                        <a href={articleJson[index].post_url}>
+                          {articleJson[index].post_url}
+                        </a>
+                      </h2>
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+              <h2 className="font-thin text-sm">
+                {articleJson[index].time_created}
+              </h2>
+            </div>
+
+            <div className="flex flex-col w-[50rem] gap-5">
+              {/*Accordion */}
+
+              {/*Accordion */}
+              {/* summary boxes */}
+
+              {/* comment section*/}
+
+              {/* comment section*/}
             </div>
           </div>
         ))}
