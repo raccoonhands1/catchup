@@ -11,6 +11,7 @@ import { TextGenerateEffect } from "@/components/text-generate-effect";
 import { InputForm } from "@/components/input-form";
 import { Textarea } from "@/components/ui/textarea";
 import articleJson from "@/lib/articles.json";
+import CommentBox from "@/components/comments";
 
 import {
   Accordion,
@@ -79,7 +80,7 @@ const LogoIcon = () => {
 const Dashboard = () => {
   return (
     <div className="flex flex-1">
-      <div className="p-2 md:p-10 rounded-tl-3xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 flex flex-col gap-2 flex-1 w-full">
+      <div className="p-2 md:p-10 rounded-3xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 flex flex-col gap-2 h-screen overflow-scroll">
         {/* summary boxes */}
 
         {articleJson.map((item, index) => (
@@ -135,7 +136,6 @@ const Dashboard = () => {
               {/* summary boxes */}
 
               {/* comment section*/}
-
               {/* comment section*/}
             </div>
           </div>

@@ -1,16 +1,14 @@
 "use client";
 import React, { useState } from "react";
 import { Sidebar, SidebarBody, SidebarLink } from "@/components/sidebar";
-import { IconBook2 } from "@tabler/icons-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Bars3BottomLeftIcon, Bars3Icon } from "@heroicons/react/24/outline";
 import { IconArrowBigLeftLines } from "@tabler/icons-react";
 import { TextGenerateEffect } from "@/components/text-generate-effect";
-import { InputForm } from "@/components/input-form";
-import { Textarea } from "@/components/ui/textarea";
 import articleJson from "@/lib/articles.json";
+import CommentBox from "@/components/comments";
 
 import {
   Accordion,
@@ -79,7 +77,7 @@ const LogoIcon = () => {
 const Dashboard = () => {
   return (
     <div className="flex flex-1">
-      <div className="p-2 md:p-10 rounded-tl-3xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 flex flex-col gap-2 flex-1 w-full">
+      <div className="p-2 md:p-10 rounded-3xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 flex flex-col gap-2 h-screen overflow-scroll">
         {/* summary boxes */}
 
         {articleJson.map((item, index) => (
@@ -99,7 +97,7 @@ const Dashboard = () => {
                   </h2>
                 </div>
               </div>
-
+              {/*Accordion */}
               <Accordion type="single" collapsible>
                 <AccordionItem value="item-1">
                   <AccordionTrigger className="text-sm">
@@ -123,39 +121,19 @@ const Dashboard = () => {
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
+              {/*Accordion */}
+
               <h2 className="font-thin text-sm">
                 {articleJson[index].time_created}
               </h2>
             </div>
-
-            <div className="flex flex-col w-[50rem] gap-5">
-              {/*Accordion */}
-
-              {/*Accordion */}
-              {/* summary boxes */}
-
-              {/* comment section*/}
-              <div
-                key={index}
-                className="w-full h-min p-4 rounded-2xl bg-gray-100 m-1"
-              >
-                {/* comment section*/}
-
-                <div className="w-full flex flex-col">
-                  <Textarea />
-                  <button className="min-w-20 h-10 border-2 rounded-xl">
-                    submit
-                  </button>
-                  {/* comment input and button */}
-                </div>
-              </div>
-              {/* comment section*/}
-            </div>
           </div>
         ))}
-
-        {/* */}
+        {/* summary boxes */}
       </div>
+      {/* comment section*/}
+      <CommentBox />
+      {/* comment section*/}
     </div>
   );
 };
