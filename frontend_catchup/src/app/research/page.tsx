@@ -9,26 +9,23 @@ import {
 } from "@tabler/icons-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Bars3BottomLeftIcon, Bars3Icon } from "@heroicons/react/24/outline";
 import { IconArrowBigLeftLines } from "@tabler/icons-react";
 import { TextGenerateEffect } from "@/components/text-generate-effect";
-import { Progress } from "@/components/ui/progress";
-import { InputForm } from "@/components/input-form";
-import { Textarea } from "@/components/ui/textarea";
 import articleJson from "@/lib/articles.json";
 
 interface Comment {
-
   text: string;
   author: string;
   time: string;
   likes: number;
-  position: string;
+  authorPosition: string;
 }
 
+
 interface ImpactItem {
+  commentsArray: Comment[];
   num: number;
   url: string;
   title: string;
@@ -39,32 +36,63 @@ interface ImpactItem {
 }
 
 
-const comments: Comment[] = [
+const comments1: Comment[] = [
   {
     text: "This is a great article!",
     author: "John Doe",
     time: "2 hours ago",
     likes: 10,
-    position: "Marketing",
+    authorPosition: "Marketing",
   },
   {
     text: "I found this very insightful.",
     author: "Jane Smith",
     time: "1 hour ago",
     likes: 5,
-    position: "UI/UX Designer",
+    authorPosition: "UI/UX Designer",
   },
-  {
+  { 
     text: "Thanks for sharing this information.",
     author: "Michael Johnson",
     time: "30 minutes ago",
     likes: 3,
-    position: "Developer",
+    authorPosition: "Developer",
+  },
+];
+
+const comments2: Comment[] = [
+  {
+    text: "This is a great article!",
+    author: "John Doe",
+    time: "2 hours ago",
+    likes: 10,
+    authorPosition: "Marketing",
+  },
+];
+
+const comments3: Comment[] = [
+  { 
+    text: "Thanks for sharing this information.",
+    author: "Michael Johnson",
+    time: "30 minutes ago",
+    likes: 3,
+    authorPosition: "Developer",
+  },
+];
+
+const comments4: Comment[] = [
+  {
+    text: "This is a great article!",
+    author: "John Doe",
+    time: "2 hours ago",
+    likes: 10,
+    authorPosition: "Marketing",
   },
 ];
 
 const impact: ImpactItem[] = [
   {
+    commentsArray: comments1,
     num: 23,
     url: "https://example.com/success/2407.12795",
     title: "The Art of Setting Achievable Goals",
@@ -75,6 +103,7 @@ const impact: ImpactItem[] = [
     arxiv: "https://arxiv.org/abs/2407.12795",
   },
   {
+    commentsArray: comments2,
     num: 89,
     url: "https://example.com/success/2407.12800",
     title: "Mastering Time Management for Optimal Productivity",
@@ -85,6 +114,7 @@ const impact: ImpactItem[] = [
     arxiv: "https://arxiv.org/abs/2407.12795",
   },
   {
+    commentsArray: comments3,
     num: 45,
     url: "https://example.com/success/2407.12801",
     title: "Building Resilience in Challenging Times",
@@ -95,6 +125,7 @@ const impact: ImpactItem[] = [
     arxiv: "https://arxiv.org/abs/2407.12795",
   },
   {
+    commentsArray: comments4,
     num: 67,
     url: "https://example.com/success/2407.12802",
     title: "The Power of Positive Thinking",
@@ -104,7 +135,8 @@ const impact: ImpactItem[] = [
       "Exploring the impact of positive thinking on personal success and well-being, backed by scientific research.",
     arxiv: "https://arxiv.org/abs/2407.12795",
   },
-  {
+  { 
+    commentsArray: [],
     num: 12,
     url: "https://example.com/success/2407.12803",
     title: "Effective Communication Skills for Leaders",
@@ -115,6 +147,7 @@ const impact: ImpactItem[] = [
     arxiv: "https://arxiv.org/abs/2407.12795",
   },
   {
+    commentsArray: [],
     num: 78,
     url: "https://example.com/success/2407.12804",
     title: "Financial Planning for Long-term Success",
@@ -125,6 +158,7 @@ const impact: ImpactItem[] = [
     arxiv: "https://arxiv.org/abs/2407.12795",
   },
   {
+    commentsArray: [],
     num: 34,
     url: "https://example.com/success/2407.12805",
     title: "Developing a Growth Mindset",
@@ -135,6 +169,7 @@ const impact: ImpactItem[] = [
     arxiv: "https://arxiv.org/abs/2407.12795",
   },
   {
+    commentsArray: [],
     num: 58,
     url: "https://example.com/success/2407.12806",
     title: "The Role of Networking in Career Advancement",
@@ -145,6 +180,7 @@ const impact: ImpactItem[] = [
     arxiv: "https://arxiv.org/abs/2407.12795",
   },
   {
+    commentsArray: [],
     num: 6,
     url: "https://example.com/success/2407.12807",
     title: "Balancing Work and Personal Life",
@@ -155,6 +191,7 @@ const impact: ImpactItem[] = [
     arxiv: "https://arxiv.org/abs/2407.12795",
   },
   {
+    commentsArray: [],
     num: 93,
     url: "https://example.com/success/2407.12808",
     title: "Embracing Change for Personal Growth",
@@ -312,7 +349,7 @@ const Dashboard = () => {
               </h1>
               <hr className="my-2 border-t-2 border-neutral-200 dark:border-neutral-700 w-full" />
 
-              {comments.map((comment, index) => (
+              {impact[0].commentsArray.map((comment, index) => (  //I'm sorry for whoever has to debug this. May god be on your side --Clayton
                 <div key={index} className="flex gap-2">
                   <div
                     key={index}
@@ -320,7 +357,7 @@ const Dashboard = () => {
                   >
                     <div className="flex-row flex items-center">
                       <h1 className="font-semibold text-sm">{comment.author}</h1>
-                      <h1 className="text-xs px-1 text-slate-500 ">{" • " + comment.position}</h1>
+                      <h1 className="text-xs px-1 text-slate-500 ">{" • " + comment.authorPosition}</h1>
                     </div>
                     <h2 className="">{comment.text}</h2>
                     <h3 className="text-sm text-slate-500">{comment.time}</h3>
