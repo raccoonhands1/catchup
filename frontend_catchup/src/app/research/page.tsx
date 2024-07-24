@@ -6,7 +6,6 @@ import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Bars3BottomLeftIcon, Bars3Icon } from "@heroicons/react/24/outline";
 import { IconArrowBigLeftLines } from "@tabler/icons-react";
-import { TextGenerateEffect } from "@/components/text-generate-effect";
 import articleJson from "@/lib/articles.json";
 import CommentBox from "@/components/comment-sidebar";
 import SelectArticleSidebar from "@/components/select-article-sidebar";
