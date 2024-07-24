@@ -23,10 +23,10 @@ export default function Dashboard() {
               <div className="flex justify-between pr-10">
                 <h2 className="font-bold">{articleJson[index].title}</h2>
                 <div className="flex  items-center p-1 gap-2 ">
-                  <h2 className="border border-black uppercase px-2 py-1 rounded-md bg-blue-500 text-white">
+                  <h2 className="border border-gray-200 lowercase px-2 py-1 rounded-md bg-blue-500 text-white">
                     {articleJson[index].type}
                   </h2>
-                  <h2 className="border border-black uppercase px-2 py-1 rounded-md bg-green-500 text-white">
+                  <h2 className="border border-gray-200 lowercase px-2 py-1 rounded-md bg-green-500 text-white">
                     LOW
                   </h2>
                 </div>
