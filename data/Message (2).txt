@@ -1,0 +1,81 @@
+[
+  {
+    "arxiv_id": "2407.12786",
+    "summary": "This paper presents Cube2Pipes, a game that investigates hybrid gameplay using augmented reality (AR) and a tangible 3D puzzle. The game interface adapts to user movement and interaction with both virtual and tangible elements. A user study evaluates the game's effectiveness in comparing hybrid gameplay to standard gameplay with only virtual elements. The study also explores whether the game facilitates understanding of spatial moves required to solve a Rubik's Cube.",
+    "tags": [
+      "computer graphics",
+      "augmented reality",
+      "game design",
+      "human-computer interaction"
+    ]
+  },
+  {
+    "arxiv_id": "2407.12787",
+    "summary": "This paper introduces GameVibe, a novel multimodal affective game corpus consisting of audiovisual stimuli from diverse gameplay sessions across 30 games. The corpus includes behavioral observations and third-person affect labels for viewer engagement. An analysis of the annotator reliability is also presented.",
+    "tags": [
+      "computer vision",
+      "affective computing",
+      "game studies",
+      "datasets"
+    ]
+  },
+  {
+    "arxiv_id": "2407.12788",
+    "summary": "This paper proposes SS-ADA, a semi-supervised active domain adaptation (SS-ADA) framework for semantic segmentation. SS-ADA integrates active learning into semi-supervised semantic segmentation to achieve the accuracy of supervised learning with limited labeled data from the target domain. An IoU-based class weighting strategy is also introduced to address the class imbalance problem.",
+    "tags": [
+      "computer vision",
+      "machine learning",
+      "domain adaptation",
+      "semantic segmentation"
+    ]
+  },
+  {
+    "arxiv_id": "2407.12790",
+    "summary": "This paper presents GPT Czech Poet, a model for generating Czech poetry based on a pre-trained large language model. The study demonstrates that guiding the generation process by specifying strophe parameters improves the model's effectiveness. The authors also find that appropriate tokenization is crucial for generating poetic strophes.",
+    "tags": [
+      "natural language processing",
+      "machine translation",
+      "poetry generation",
+      "Czech language"
+    ]
+  },
+  {
+    "arxiv_id": "2407.12791",
+    "summary": "This paper introduces TourLLM, a Qwen-based model fine-tuned with a new dataset called Cultour, designed to enhance the quality of information provided about tourist attractions and travel planning. The authors evaluate TourLLM's performance using automatic and human evaluation, proposing a new human evaluation criterion named CRA (Consistency, Readability, Availability).",
+    "tags": [
+      "natural language processing",
+      "travel",
+      "tourism",
+      "question answering"
+    ]
+  },
+  {
+    "arxiv_id": "2407.12792",
+    "summary": "This paper proposes C-LAIfO, an algorithm for imitation learning from videos, even in the presence of visual mismatch. C-LAIfO leverages contrastive learning and data augmentation to achieve visually robust latent space estimation. It then uses off-policy adversarial imitation learning within this space. Experiments demonstrate C-LAIfO's effectiveness on high-dimensional continuous robotic tasks.",
+    "tags": [
+      "machine learning",
+      "reinforcement learning",
+      "computer vision",
+      "robotics"
+    ]
+  },
+  {
+    "arxiv_id": "2407.12793",
+    "summary": "This paper reviews the state-of-the-art methods in data collection and labeling for machine learning. It discusses both the challenges and opportunities in this field, highlighting the need for efficient and scalable techniques to meet the growing demands of machine learning applications.",
+    "tags": [
+      "machine learning",
+      "data science",
+      "data collection",
+      "data labeling"
+    ]
+  },
+  {
+    "arxiv_id": "2407.12794",
+    "summary": "This paper introduces Aurora, a system for relational query rewrite that combines Equality Saturation with Graph Reinforcement Learning. Aurora uses a novel RL agent to guide Equality Saturation, achieving faster and more efficient query rewriting compared to existing methods.",
+    "tags": [
+      "database",
+      "query optimization",
+      "graph learning",
+      "reinforcement learning"
+    ]
+  
