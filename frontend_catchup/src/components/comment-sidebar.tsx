@@ -3,34 +3,14 @@ interface Comment {
   author: string;
   time: string;
   likes: number;
-  position: string;
+  authorPosition: string;
 }
 
-const comments: Comment[] = [
-  {
-    text: "This is a great article!",
-    author: "John Doe",
-    time: "2 hours ago",
-    likes: 10,
-    position: "Marketing",
-  },
-  {
-    text: "I found this very insightful.",
-    author: "Jane Smith",
-    time: "1 hour ago",
-    likes: 5,
-    position: "UI/UX Designer",
-  },
-  {
-    text: "Thanks for sharing this information.",
-    author: "Michael Johnson",
-    time: "30 minutes ago",
-    likes: 3,
-    position: "Developer",
-  },
-];
+type CommentBoxProps = {
+  comments: Comment[];
+};
 
-export default function CommentBox() {
+export default function CommentBox({ comments }: CommentBoxProps) {
   return (
     <div className="flex gap-5 h-min w-[50rem]">
       <div className="p-2 md:pt-6 md:pl-8 md:pr-8 rounded-tl-3xl rounded-l-3xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 flex flex-col flex-1">
@@ -47,7 +27,7 @@ export default function CommentBox() {
                 <div className="flex-row flex items-center">
                   <h1 className="font-semibold text-sm">{comment.author}</h1>
                   <h1 className="text-xs px-1 text-slate-500 ">
-                    {" • " + comment.position}
+                    {" • " + comment.authorPosition}
                   </h1>
                 </div>
                 <h2 className="">{comment.text}</h2>
