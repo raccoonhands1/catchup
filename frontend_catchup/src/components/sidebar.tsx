@@ -174,8 +174,8 @@ export const SidebarLink = ({
         }}
         className="text-neutral-700 dark:text-neutral-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0"
       >
-        <div className="flex w-[15rem] justify-between items-center text-base">
-          <span className="group-hover/modal-btn:translate-x-40 text-center transition duration-500">
+        <div className="flex w-[15rem] justify-between items-center text-base  hover:border-gray-700 border-[1px] border-grey rounded-md">
+          <span className="ml-2 group-hover/modal-btn:translate-x-40 text-center transition duration-500 overflow-x-hidden">
             {label}
           </span>
           <button
@@ -184,7 +184,7 @@ export const SidebarLink = ({
                 description: "You have subscribed to the topic",
               })
             }
-            className="bg-gray-700 rounded-md text-white p-2"
+            className="bg-gray-700 rounded-md text-white p-2 rounded-bl-none rounded-tl-none"
           >
             Subscribe
           </button>
