@@ -55,7 +55,7 @@ export default function CommentBox({ comments }: CommentBoxProps) {
             ></input>
             {/* emoji*/}
             <svg
-              className="w-6 h-6 text-gray-500 cursor-pointer mr-6"
+              className="w-6 h-6 text-gray-500 cursor-pointer mr-2"
               fill="currentColor"
               viewBox="0 0 16 16"
             >
@@ -63,6 +63,18 @@ export default function CommentBox({ comments }: CommentBoxProps) {
               <path d="M4.285 9.567a.5.5 0 01.683.183A3.498 3.498 0 008 11.5a3.498 3.498 0 003.032-1.75.5.5 0 11.866.5A4.498 4.498 0 018 12.5a4.498 4.498 0 01-3.898-2.25.5.5 0 01.183-.683zM7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5zm4 0c0 .828-.448 1.5-1 1.5s-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5z" />
             </svg>
             {/* emoji*/}
+            {/* image */}
+            <svg
+              className="w-6 h-6 text-gray-500 cursor-pointer mr-4"
+              fill="currentColor"
+              viewBox="0 0 16 16"
+              height="1em"
+              width="1em"
+            >
+              <path d="M6.002 5.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
+              <path d="M2.002 1a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V3a2 2 0 00-2-2h-12zm12 1a1 1 0 011 1v6.5l-3.777-1.947a.5.5 0 00-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 00-.63.062L1.002 12V3a1 1 0 011-1h12z" />
+            </svg>
+          {/* image */}
           </div>
           <button className="bg-blue-500 rounded-2xl font-semibold px-8 text-white py-2 ">
             post
