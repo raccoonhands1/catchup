@@ -11,7 +11,6 @@ import { useState } from "react";
 import { MouseEvent } from "react";
 import SelectArticleSidebar from "./select-article-sidebar";
 
-
 interface Comment {
   text: string;
   author: string;
@@ -76,31 +75,31 @@ const comments4: Comment[] = [
 ];
 
 export default function Dashboard() {
-  const [selectedArticleIndex, setSelectedArticleIndex] = useState<number | null>(null);
+  const [selectedArticleIndex, setSelectedArticleIndex] = useState<
+    number | null
+  >(null);
 
-  function selectArticle(index:number):void{
+  function selectArticle(index: number): void {
     setSelectedArticleIndex(index);
   }
 
-
   //should be replaced with mongodb fetch in the future. This is for demo purposes.
   const getCommentsForArticle = (index: number): Comment[] => {
-      switch (index) {
-        case 0:
-          return comments1;
-        case 1:
-          return comments2;
-        case 2:
-          return comments3;
-        case 3:
-          return comments4;
-        default:
-          return [];
-      }
-    };
+    switch (index) {
+      case 0:
+        return comments1;
+      case 1:
+        return comments2;
+      case 2:
+        return comments3;
+      case 3:
+        return comments4;
+      default:
+        return [];
+    }
+  };
 
   return (
-    
     <div className="flex flex-1">
       <div className="p-2 md:p-10 rounded-3xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 flex flex-col gap-2 h-screen overflow-scroll">
         {/* summary boxes */}
@@ -125,9 +124,11 @@ export default function Dashboard() {
               {/*Accordion */}
               <Accordion type="single" collapsible>
                 <AccordionItem value="item-1">
-                  <AccordionTrigger 
-                  className="text-sm" 
-                  onClick={(event: MouseEvent<HTMLButtonElement>) => selectArticle(index)}
+                  <AccordionTrigger
+                    className="text-sm"
+                    onClick={(event: MouseEvent<HTMLButtonElement>) =>
+                      selectArticle(index)
+                    }
                   >
                     Read more
                   </AccordionTrigger>
@@ -161,11 +162,11 @@ export default function Dashboard() {
       </div>
       {/* comment section*/}
       {selectedArticleIndex !== null ? (
-          <CommentBox comments={getCommentsForArticle(selectedArticleIndex)} />
-        ) : (
-            <SelectArticleSidebar /> // Replace with whatever you want to show in the else case
-          )}
-      { /* comment section*/ }
+        <CommentBox comments={getCommentsForArticle(selectedArticleIndex)} />
+      ) : (
+        <SelectArticleSidebar /> // Replace with whatever you want to show in the else case
+      )}
+      {/* comment section*/}
     </div>
   );
-};
+}

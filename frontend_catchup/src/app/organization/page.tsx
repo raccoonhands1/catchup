@@ -11,7 +11,7 @@ import { TextGenerateEffect } from "@/components/text-generate-effect";
 import { InputForm } from "@/components/input-form";
 import { Textarea } from "@/components/ui/textarea";
 import articleJson from "@/lib/articles.json";
-import CommentBox from "@/components/comments";
+// import CommentBox from "@/components/comments";
 
 import {
   Accordion,
