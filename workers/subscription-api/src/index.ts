@@ -1,10 +1,30 @@
 import { Hono } from 'hono';
 import { Queue, QueueContentType } from '@cloudflare/workers-types';
 import { XMLParser } from 'fast-xml-parser';
-
+import { drizzle } from 'drizzle-orm/d1';
+import {
+	papers,
+	topics,
+	paperTopics,
+	Paper,
+	NewPaper,
+	Topic,
+	NewTopic,
+} from './db/schema';
+import { eq, and, desc } from 'drizzle-orm';
 interface Env {
 	QUEUE: Queue;
 	APP_SECRET: string;
+	DB: D1Database;
+}
+interface Article {
+	id: number;
+	arxivId: string;
+	title: string;
+	summary: string;
+	pdf: string;
+	authors: string;
+	published: string;
 }
 
 const app = new Hono<{ Bindings: Env }>();
@@ -18,16 +38,6 @@ const authMiddleware = async (c: any, next: () => Promise<void>) => {
 };
 
 app.use(authMiddleware);
-
-interface Paper {
-	title: string;
-	summary: string;
-	pdf: string;
-	//authors: string[];
-	authors: string;
-	published: string;
-	arxivId: string;
-}
 
 async function fetchArxivData(topic: string): Promise<Paper[]> {
 	const currentDate = new Date();
@@ -81,9 +91,17 @@ async function fetchArxivData(topic: string): Promise<Paper[]> {
 		});
 
 		// Filter articles published within the last 7 days
-		const recentArticles = articles.filter(
-			article => new Date(article.published) >= sevenDaysAgo
-		);
+		const recentArticles = articles
+			.filter(article => new Date(article.published) >= sevenDaysAgo)
+			.map((article, index) => ({
+				id: index + 1, // or use a more appropriate id generation method
+				arxivId: article.arxivId,
+				title: article.title,
+				summary: article.summary,
+				pdf: article.pdf,
+				authors: article.authors,
+				published: article.published,
+			}));
 
 		allArticles.push(...recentArticles);
 
@@ -124,15 +142,159 @@ app.post('/subscribe', async c => {
 
 	try {
 		const articles = await fetchArxivData(topic);
-		//await c.env.QUEUE.sendBatch(
-		//	articles.map(article => ({
-		//		body: JSON.stringify(article),
-		//		contentType: 'application/json' as QueueContentType,
-		//	}))
-		//);
-		return c.json({ success: true, count: articles.length, articles });
+		const db = drizzle(c.env.DB);
+
+		// Insert or get the topic
+		let dbTopic: Topic;
+		try {
+			const result = await db
+				.insert(topics)
+				.values({ name: topic })
+				.returning()
+				.get();
+			dbTopic = result;
+		} catch (error) {
+			// If topic already exists, fetch it
+			if (
+				error instanceof Error &&
+				error.message.includes('UNIQUE constraint failed')
+			) {
+				const existingTopic = await db
+					.select()
+					.from(topics)
+					.where(eq(topics.name, topic))
+					.get();
+				if (!existingTopic) {
+					throw new Error(
+						`Topic ${topic} not found after unique constraint error`
+					);
+				}
+				dbTopic = existingTopic;
+			} else {
+				throw error;
+			}
+		}
+		let insertedCount = 0;
+		let skippedCount = 0;
+		let errorCount = 0;
+
+		// Reduce batch size to avoid hitting SQLite variable limit
+		const batchSize = 20;
+
+		for (let i = 0; i < articles.length; i += batchSize) {
+			const batch = articles.slice(i, i + batchSize);
+
+			try {
+				// Insert papers one by one to avoid the variable limit
+				for (const article of batch) {
+					try {
+						const insertedPaper = await db
+							.insert(papers)
+							.values({
+								arxivId: article.arxivId,
+								title: article.title,
+								summary: article.summary,
+								pdf: article.pdf,
+								authors: article.authors,
+								published: article.published,
+							} as NewPaper)
+							.onConflictDoNothing()
+							.returning()
+							.get();
+
+						if (insertedPaper) {
+							insertedCount++;
+
+							// Create the many-to-many relationship
+							await db
+								.insert(paperTopics)
+								.values({
+									paperId: insertedPaper.id,
+									topicId: dbTopic.id,
+								})
+								.onConflictDoNothing()
+								.run();
+						} else {
+							skippedCount++;
+						}
+					} catch (error) {
+						console.error(`Error inserting paper: ${(error as Error).message}`);
+						errorCount++;
+					}
+				}
+			} catch (error) {
+				console.error(`Error processing batch: ${(error as Error).message}`);
+				errorCount += batch.length;
+			}
+		}
+
+		console.log(
+			`Inserted: ${insertedCount}, Skipped: ${skippedCount}, Errors: ${errorCount}`
+		);
+
+		return c.json({
+			success: true,
+			totalCount: articles.length,
+			insertedCount,
+			skippedCount,
+			errorCount,
+			topic: dbTopic.name,
+		});
 	} catch (error) {
 		console.error((error as Error).message);
+		return c.json(
+			{ error: 'An error occurred while processing the request' },
+			500
+		);
+	}
+});
+
+app.get('/articles/:topic', async c => {
+	const topic = c.req.param('topic');
+
+	if (!topic) {
+		return c.json({ error: 'Missing topic parameter' }, 400);
+	}
+
+	try {
+		const db = drizzle(c.env.DB);
+
+		// First, find the topic
+		const dbTopic = await db
+			.select()
+			.from(topics)
+			.where(eq(topics.name, topic))
+			.get();
+
+		if (!dbTopic) {
+			return c.json({ error: 'Topic not found' }, 404);
+		}
+
+		// Then, find all papers associated with this topic
+		const articlesWithTopic = await db
+			.select({
+				id: papers.id,
+				arxivId: papers.arxivId,
+				title: papers.title,
+				summary: papers.summary,
+				pdf: papers.pdf,
+				authors: papers.authors,
+				published: papers.published,
+			})
+			.from(papers)
+			.innerJoin(paperTopics, eq(papers.id, paperTopics.paperId))
+			.where(eq(paperTopics.topicId, dbTopic.id))
+			.orderBy(desc(papers.published))
+			.all();
+
+		return c.json({
+			topic: dbTopic.name,
+			count: articlesWithTopic.length,
+			articles: articlesWithTopic,
+		});
+	} catch (error) {
+		console.error((error as Error).message);
+		return c.json({ error: 'An error occurred while fetching articles' }, 500);
 	}
 });
 

@@ -4,6 +4,13 @@ compatibility_date = "2024-08-12"
 [[queues.producers]]
 binding = "QUEUE"
 queue = "catchup-processing"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "catchup-demo"
+database_id = "77c5fed8-4bfb-49b0-be7f-3ecbfc8eacb2"
+migrations_dir = "drizzle"
+
 # [vars]
 # MY_VAR = "my-variable"
 
