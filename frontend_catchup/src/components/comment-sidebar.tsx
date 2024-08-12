@@ -1,3 +1,4 @@
+import '../app/globals.css'
 interface Comment {
   text: string;
   author: string;
@@ -12,9 +13,9 @@ type CommentBoxProps = {
 
 export default function CommentBox({ comments }: CommentBoxProps) {
   return (
-    <div className="flex gap-5 h-min w-[50rem]">
-      <div className="p-2 md:pt-6 md:pl-8 md:pr-8 rounded-tl-md rounded-l-md border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 flex flex-col flex-1">
-        <div className="flex flex-1 flex-col gap-2">
+    <div className="flex gap-5 h-min w-[50rem] max-h-screen">
+      <div className="p-2 md:pt-6 md:pl-6 md:pr-6 rounded-tl-md rounded-l-md border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 flex flex-col flex-1">
+        <div className="flex flex-1 flex-col gap-2 overflow-y-scroll no-scrollbar">
           <h1 className="font-semibold text-lg">discussion</h1>
           <hr className="my-2 border-t-2 border-neutral-200 dark:border-neutral-700 w-full" />
 
