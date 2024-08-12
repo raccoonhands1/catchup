@@ -13,7 +13,7 @@ type CommentBoxProps = {
 export default function CommentBox({ comments }: CommentBoxProps) {
   return (
     <div className="flex gap-5 h-min w-[50rem]">
-      <div className="p-2 md:pt-6 md:pl-8 md:pr-8 rounded-tl-3xl rounded-l-3xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 flex flex-col flex-1">
+      <div className="p-2 md:pt-6 md:pl-8 md:pr-8 rounded-tl-md rounded-l-md border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 flex flex-col flex-1">
         <div className="flex flex-1 flex-col gap-2">
           <h1 className="font-semibold text-lg">discussion</h1>
           <hr className="my-2 border-t-2 border-neutral-200 dark:border-neutral-700 w-full" />
@@ -22,7 +22,7 @@ export default function CommentBox({ comments }: CommentBoxProps) {
             <div key={index} className="flex gap-2 mb-4">
               <div
                 key={index}
-                className="w-full p-4 rounded-xl bg-gray-100 inset-1"
+                className="w-full p-4 rounded-md bg-gray-100 inset-1"
               >
                 <div className="flex-row flex items-center">
                   <h1 className="font-semibold text-sm">{comment.author}</h1>
@@ -48,7 +48,7 @@ export default function CommentBox({ comments }: CommentBoxProps) {
           ))}
         </div>
         <div className="inset-x-0 flex-row flex bottom-0">
-          <div className="flex border-lg border-black bg-gray-200 min-h-10 rounded-2xl flex-1 items-center">
+          <div className="flex border-lg border-black bg-gray-200 min-h-10 rounded-xl flex-1 items-center">
             <input
               placeholder="add a comment..."
               className="flex-1 outline-none bg-transparent h-full px-6"
@@ -76,8 +76,8 @@ export default function CommentBox({ comments }: CommentBoxProps) {
             </svg>
           {/* image */}
           </div>
-          <button className="bg-blue-500 rounded-2xl font-semibold px-8 text-white py-2 ">
-            post
+          <button className="bg-black rounded-xl font-semibold px-8 text-white text-sm">
+            POST
           </button>
         </div>
       </div>

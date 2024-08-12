@@ -30,11 +30,11 @@ const config = {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+          DEFAULT: "hsl(360, 0%, 98%)",
+          foreground: "hsl(360, 0%, 100%)",
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
+          DEFAULT: "hsl(360, 0%, 90%)",
           foreground: "hsl(var(--secondary-foreground))",
         },
         destructive: {
@@ -56,6 +56,14 @@ const config = {
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
+        },
+        button: {
+          DEFAULT: "hsl(290, 74%, 86%)",
+          subscription: "hsla(267, 19%, 23%, 1)",
+        },
+        'button-hover': {
+          DEFAULT: "hsl(290, 74%, 76%)", // Slightly darker or different hue for hover
+          subscription: "hsla(0, 19%, 0%, 1)", // Slightly lighter or different hue for hover
         },
       },
       borderRadius: {

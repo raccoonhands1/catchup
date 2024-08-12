@@ -101,14 +101,14 @@ export default function Dashboard() {
 
   return (
     <div className="flex flex-1">
-      <div className="p-2 md:p-10 rounded-3xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 flex flex-col gap-2 h-screen overflow-scroll">
+      <div className="p-2 dark:border-neutral-700 bg-primary dark:bg-neutral-900 flex flex-col gap-2 h-screen overflow-scroll">
         {/* summary boxes */}
 
         {articleJson.map((item, index) => (
           <div key={index} className="flex gap-2">
             <div
               key={index}
-              className="lg:w-full p-4 rounded-2xl bg-gray-100 border-2"
+              className="lg:w-full p-4 rounded-md bg-primary-foreground border-2"
             >
               <div className="flex justify-between pr-6">
                 <h2 className="font-bold">{articleJson[index].title}</h2>

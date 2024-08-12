@@ -5,7 +5,7 @@ import React, { useState, createContext, useContext } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { IconArrowBigLeftLines, IconX } from "@tabler/icons-react";
 import { ToastAction } from "@/components/ui/toast";
-
+import '../app/globals.css';
 import { toast, useToast } from "@/components/ui/use-toast";
 
 interface SidebarContextProps {
@@ -81,7 +81,7 @@ export const DesktopSidebar = ({
     <>
       <motion.div
         className={cn(
-          "h-full px-4 py-4 hidden  md:flex md:flex-col bg-neutral-100 dark:bg-neutral-800 w-[300px] flex-shrink-0",
+          "h-screen px-4 py-4 hidden md:flex md:flex-col border-r-2 border-neutral-200 bg-primary-foreground dark:bg-neutral-800 w-[300px] flex-shrink-0 overflow-y-scroll no-scrollbar",
           className
         )}
         animate={{
@@ -107,7 +107,7 @@ export const MobileSidebar = ({
     <>
       <div
         className={cn(
-          "h-10 px-4 py-4 flex flex-row md:hidden  items-center justify-between bg-neutral-100 dark:bg-neutral-800 w-full"
+          "h-10 px-4 py-4 flex flex-row md:hidden  items-center justify-between bg-primary dark:bg-neutral-800 w-full"
         )}
         {...props}
       >
@@ -129,7 +129,7 @@ export const MobileSidebar = ({
                 ease: "easeInOut",
               }}
               className={cn(
-                "fixed h-full w-full inset-0 bg-white dark:bg-neutral-900 p-10 z-[100] flex flex-col justify-between",
+                "fixed h-full w-full inset-0 bg-primary-foreground dark:bg-neutral-900 p-10 z-[100] flex flex-col justify-between",
                 className
               )}
             >
@@ -174,8 +174,8 @@ export const SidebarLink = ({
         }}
         className="text-neutral-700 dark:text-neutral-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0"
       >
-        <div className="flex w-[15rem] justify-between items-center text-base  hover:border-gray-700 border-[1px] border-grey rounded-md">
-          <span className="ml-2 group-hover/modal-btn:translate-x-40 text-center transition duration-500 overflow-x-hidden">
+        <div className="flex w-[15rem] justify-between items-center text-base  hover:border-gray-700 border-[1px] border-grey rounded-sm">
+          <span className="ml-2 group-hover/modal-btn:translate-x-40 text-center transition duration-500 overflow-x-hidden no-scrollbar">
             {label}
           </span>
           <button
@@ -184,7 +184,7 @@ export const SidebarLink = ({
                 description: "You have subscribed to the topic",
               })
             }
-            className="bg-gray-700 rounded-md text-white p-2 rounded-bl-none rounded-tl-none"
+            className="bg-button-subscription hover:bg-button-hover-subscription rounded-sm text-white p-2 rounded-bl-none rounded-tl-none"
           >
             Subscribe
           </button>
