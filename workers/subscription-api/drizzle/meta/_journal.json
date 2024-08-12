@@ -15,6 +15,27 @@
       "when": 1723502223578,
       "tag": "0001_shocking_wolverine",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1723503992023,
+      "tag": "0002_panoramic_otto_octavius",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1723504205771,
+      "tag": "0003_empty_ender_wiggin",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1723504336961,
+      "tag": "0004_square_white_tiger",
+      "breakpoints": true
     }
   ]
 }

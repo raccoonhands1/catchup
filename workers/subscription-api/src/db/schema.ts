@@ -17,10 +17,10 @@ export const topics = sqliteTable('topics', {
 export const paperTopics = sqliteTable('paper_topics', {
 	paperId: integer('paper_id')
 		.notNull()
-		.references(() => papers.id),
+		.references(() => papers.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
 	topicId: integer('topic_id')
 		.notNull()
-		.references(() => topics.id),
+		.references(() => topics.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
 });
 
 export type Paper = typeof papers.$inferSelect;

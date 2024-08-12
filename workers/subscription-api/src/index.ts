@@ -188,6 +188,9 @@ app.post('/subscribe', async c => {
 				// Insert papers one by one to avoid the variable limit
 				for (const article of batch) {
 					try {
+						let paperId: number;
+
+						// Try to insert the paper
 						const insertedPaper = await db
 							.insert(papers)
 							.values({
@@ -203,22 +206,49 @@ app.post('/subscribe', async c => {
 							.get();
 
 						if (insertedPaper) {
+							// New paper was inserted
+							paperId = insertedPaper.id;
 							insertedCount++;
-
-							// Create the many-to-many relationship
-							await db
-								.insert(paperTopics)
-								.values({
-									paperId: insertedPaper.id,
-									topicId: dbTopic.id,
-								})
-								.onConflictDoNothing()
-								.run();
 						} else {
+							// Paper already exists, fetch its ID
+							const existingPaper = await db
+								.select({ id: papers.id })
+								.from(papers)
+								.where(eq(papers.arxivId, article.arxivId))
+								.get();
+
+							if (!existingPaper) {
+								throw new Error(
+									`Paper with arxivId ${article.arxivId} not found after conflict`
+								);
+							}
+							paperId = existingPaper.id;
 							skippedCount++;
 						}
+
+						// Create the many-to-many relationship if it doesn't exist
+						const result = await db
+							.insert(paperTopics)
+							.values({
+								paperId: paperId,
+								topicId: dbTopic.id,
+							})
+							.onConflictDoNothing()
+							.run();
+
+						if (!result.success) {
+							console.log(
+								`M2M relationship already exists for paper ${paperId} and topic ${dbTopic.id}`
+							);
+						} else {
+							console.log(
+								`Created M2M relationship for paper ${paperId} and topic ${dbTopic.id}`
+							);
+						}
 					} catch (error) {
-						console.error(`Error inserting paper: ${(error as Error).message}`);
+						console.error(
+							`Error processing paper: ${(error as Error).message}`
+						);
 						errorCount++;
 					}
 				}
