@@ -1,5 +1,9 @@
 import { Hono } from 'hono';
-import { Queue, QueueContentType } from '@cloudflare/workers-types';
+import {
+	Queue,
+	KVNamespace,
+	QueueContentType,
+} from '@cloudflare/workers-types';
 import { XMLParser } from 'fast-xml-parser';
 import { drizzle } from 'drizzle-orm/d1';
 import {
@@ -9,13 +13,13 @@ import {
 	Paper,
 	NewPaper,
 	Topic,
-	NewTopic,
 } from './db/schema';
-import { eq, and, desc } from 'drizzle-orm';
+import { eq, desc } from 'drizzle-orm';
 interface Env {
 	QUEUE: Queue;
 	APP_SECRET: string;
 	DB: D1Database;
+	KV: KVNamespace;
 }
 interface Article {
 	id: number;
@@ -286,7 +290,16 @@ app.get('/articles/:topic', async c => {
 		return c.json({ error: 'Missing topic parameter' }, 400);
 	}
 
+	const cacheKey = `articles:${topic}`;
+	const kv = c.env.KV;
+
 	try {
+		// Try to get the cached response
+		const cachedResponse = await kv.get(cacheKey);
+		if (cachedResponse) {
+			return c.json(JSON.parse(cachedResponse));
+		}
+
 		const db = drizzle(c.env.DB);
 
 		// First, find the topic
@@ -317,11 +330,16 @@ app.get('/articles/:topic', async c => {
 			.orderBy(desc(papers.published))
 			.all();
 
-		return c.json({
+		const response = {
 			topic: dbTopic.name,
 			count: articlesWithTopic.length,
 			articles: articlesWithTopic,
-		});
+		};
+
+		// Cache the response for one day
+		await kv.put(cacheKey, JSON.stringify(response), { expirationTtl: 86400 });
+
+		return c.json(response);
 	} catch (error) {
 		console.error((error as Error).message);
 		return c.json({ error: 'An error occurred while fetching articles' }, 500);

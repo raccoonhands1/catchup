@@ -11,6 +11,11 @@ database_name = "catchup-demo"
 database_id = "77c5fed8-4bfb-49b0-be7f-3ecbfc8eacb2"
 migrations_dir = "drizzle"
 
+[[kv_namespaces]]
+binding = "KV"
+id = "8c4809f985214cddbeb53f6a68952300"
+preview_id="8c4809f985214cddbeb53f6a68952300"
+
 # [vars]
 # MY_VAR = "my-variable"
 
