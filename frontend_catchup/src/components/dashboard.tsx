@@ -129,7 +129,7 @@ export default function Dashboard() {
 
   return (
     <div className="flex flex-1">
-      <div className="p-2 dark:border-neutral-700 bg-primary dark:bg-neutral-900 flex flex-col gap-2 h-screen overflow-scroll">
+      <div className="p-2 dark:border-neutral-700 bg-primary dark:bg-neutral-900 flex flex-col gap-2 h-screen overflow-y-scroll">
         {/* summary boxes */}
 
         {articleJson.map((item, index) => (
