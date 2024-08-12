@@ -1,44 +1,38 @@
-import { Metadata } from "next";
-import "./globals.css";
-import Navbar from "@/components/navbar";
-import { Toaster } from "@/components/ui/toaster";
+import { Metadata } from 'next';
+import './globals.css';
+import Navbar from '@/components/navbar';
+import { Toaster } from '@/components/ui/toaster';
 
-import {
-  ClerkProvider,
-  SignInButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from "@clerk/nextjs";
+import { ClerkProvider } from '@clerk/nextjs';
 
 export const metadata: Metadata = {
-  title: "Catchup!",
-  description: "Catchup!'s website.",
+	title: 'Catchup!',
+	description: "Catchup!'s website.",
 };
 
 export default function RootLayout({
-  children,
+	children,
 }: {
-  children: React.ReactNode;
+	children: React.ReactNode;
 }) {
-  return (
-    <ClerkProvider>
-      <html lang="en">
-        <meta charSet="utf-8" />
-        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+	return (
+		<ClerkProvider>
+			<html lang="en" suppressHydrationWarning>
+				<meta charSet="utf-8" />
+				<meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+				<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+				<link rel="icon" type="image/x-icon" href="/favicon.ico" />
 
-        <body>
-          <Toaster />
+				<body suppressHydrationWarning>
+					<Toaster />
 
-          <Navbar />
+					<Navbar />
 
-          {children}
+					{children}
 
-          {/* <Footer /> */}
-        </body>
-      </html>
-    </ClerkProvider>
-  );
+					{/* <Footer /> */}
+				</body>
+			</html>
+		</ClerkProvider>
+	);
 }
