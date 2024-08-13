@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react';
 import CommentBox from '@/components/comment-sidebar';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Info } from 'lucide-react';
+import { FileX, Info } from 'lucide-react';
 import SelectArticleSidebar from './select-article-sidebar';
 import useTopicStore from '@/lib/store/ui';
 import { getArticlesForTopic } from '@/lib/actions/api';
 import { Article } from '@/lib/types';
 import ArticleCard from './article-card';
 import { Loader2 } from 'lucide-react';
+import { Card } from './card-hover-effect';
+import { CardContent } from './ui/card';
 
 export default function Dashboard() {
 	const { selectedTopic } = useTopicStore();
@@ -82,12 +84,26 @@ export default function Dashboard() {
 
 						{!isLoading &&
 							!error &&
-							articles.map(article => (
-								<ArticleCard
-									article={article}
-									key={article.id}
-									onClick={selectArticle}
-								/>
+							(articles.length > 0 ? (
+								articles.map(article => (
+									<ArticleCard
+										article={article}
+										key={article.id}
+										onClick={selectArticle}
+									/>
+								))
+							) : (
+								<Card className="w-full">
+									<CardContent className="flex flex-col items-center justify-center py-10">
+										<FileX className="h-12 w-12 text-gray-400 mb-4" />
+										<p className="text-lg font-medium text-gray-900">
+											No articles found
+										</p>
+										<p className="text-sm text-gray-500">
+											Try adjusting your search or filters
+										</p>
+									</CardContent>
+								</Card>
 							))}
 					</>
 				)}
