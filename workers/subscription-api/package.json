@@ -1,0 +1,20 @@
+{
+	"name": "subscription-api",
+	"scripts": {
+		"dev": "wrangler dev src/index.ts",
+		"deploy": "wrangler deploy --minify src/index.ts",
+		"db:generate": "drizzle-kit generate",
+		"db:apply:local": "wrangler d1 migrations apply catchup-demo --local",
+		"db:apply:remote": "wrangler d1 migrations apply catchup-demo --remote"
+	},
+	"dependencies": {
+		"drizzle-orm": "^0.33.0",
+		"fast-xml-parser": "^4.4.1",
+		"hono": "^4.5.5"
+	},
+	"devDependencies": {
+		"@cloudflare/workers-types": "^4.20240529.0",
+		"drizzle-kit": "^0.24.0",
+		"wrangler": "^3.57.2"
+	}
+}
