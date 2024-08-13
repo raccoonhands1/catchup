@@ -48,6 +48,7 @@ export default function SidebarDemo() {
 			<Dashboard />
 		</div>
 	);
+
 }
 const Logo = () => {
 	return (

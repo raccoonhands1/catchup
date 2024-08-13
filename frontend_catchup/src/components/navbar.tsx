@@ -8,9 +8,11 @@ import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 import Link from 'next/link';
 
 const navigation = [
+
 	{ name: 'Home', href: '/' },
 	{ name: 'Research', href: '/research' },
 	{ name: 'Preferences', href: '/preferences' },
+
 ];
 
 export default function Navbar() {
