@@ -80,3 +80,29 @@ export async function subscribeTopic(topic: string) {
 		throw error;
 	}
 }
+
+export async function getHackerNewsArticles() {
+	const { getToken } = auth();
+	try {
+		const options = {
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${await getToken({ template: 'default' })}`,
+			},
+		};
+		const res = await fetch(
+			`${process.env.WORKER_API_URL}/hacker-news`,
+			options
+		);
+
+		if (!res.ok) {
+			throw new Error(`HTTP error! status: ${res.status}`);
+		}
+
+		const data = await res.json();
+		return data.articles;
+	} catch (error) {
+		console.error('Failed to fetch Hacker News articles:', error);
+		throw error;
+	}
+}

@@ -25,3 +25,12 @@ export interface Comment {
 export type CommentBoxProps = {
 	comments: Comment[];
 };
+
+export interface HNArticle {
+	id: number;
+	title: string;
+	url: string;
+	points: number;
+	author: string;
+	published: string;
+}

@@ -679,6 +679,63 @@ userRouter
 		}
 	});
 
+interface CachedHNArticleData {
+	articles: any[]; // Replace 'any' with a more specific type if you have one for articles
+	// Add other properties if needed
+}
+userRouter.get('/hacker-news', async c => {
+	try {
+		const cacheKey = 'hacker-news-articles';
+
+		// Try to get cached data from KV
+		let cachedData = await c.env.KV.get<CachedHNArticleData>(cacheKey, 'json');
+
+		if (cachedData) {
+			return c.json({
+				success: true,
+				count: cachedData.articles.length,
+				articles: cachedData.articles,
+				cached: true,
+			});
+		}
+
+		const db = drizzle(c.env.DB);
+
+		// Calculate the date 7 days ago
+		const oneWeekAgo = new Date();
+		oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+		const oneWeekAgoISO = oneWeekAgo.toISOString();
+
+		// Fetch HackerNews articles from the last week
+		const articles = await db
+			.select()
+			.from(hackerNewsArticles)
+			.where(gte(hackerNewsArticles.published, oneWeekAgoISO))
+			.orderBy(desc(hackerNewsArticles.published))
+			.limit(30);
+
+		// Prepare the response data
+		const responseData = {
+			success: true,
+			count: articles.length,
+			articles: articles,
+		};
+
+		// Cache the data in KV for one week (604800 seconds)
+		await c.env.KV.put(cacheKey, JSON.stringify(responseData), {
+			expirationTtl: 604800,
+		});
+
+		return c.json(responseData);
+	} catch (error) {
+		console.error('Error fetching Hacker News articles:', error);
+		return c.json(
+			{ error: 'An error occurred while fetching Hacker News articles' },
+			500
+		);
+	}
+});
+
 const superUserRouter = new Hono<{
 	Bindings: Env;
 }>();
