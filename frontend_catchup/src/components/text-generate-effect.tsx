@@ -28,7 +28,7 @@ export const TextGenerateEffect = ({
 				ease: 'linear',
 			}
 		);
-	}, [scope.current, wordsArray.length]);
+	}, [wordsArray.length, animate]);
 
 	const renderWords = () => {
 		return (

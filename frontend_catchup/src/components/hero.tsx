@@ -27,7 +27,8 @@ export default function Hero() {
 	};
 	const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		console.log('submitted');
+		console.log(`subscribed to ${topic}`);
+		// TODO: implement subscription
 	};
 	return (
 		<div className="px-6 pt-14 lg:px-8">

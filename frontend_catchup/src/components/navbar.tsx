@@ -8,11 +8,9 @@ import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 import Link from 'next/link';
 
 const navigation = [
-
 	{ name: 'Home', href: '/' },
 	{ name: 'Research', href: '/research' },
 	{ name: 'Preferences', href: '/preferences' },
-
 ];
 
 export default function Navbar() {
@@ -28,7 +26,13 @@ export default function Navbar() {
 					<div className="flex lg:flex-1">
 						<a href="/" className="-m-1.5 p-1.5">
 							<span className="sr-only">Your Company</span>
-							<Image alt="" src="/catchup_circle.png" width={50} height={50} />
+							<Image
+								alt=""
+								src="/catchup_circle.png"
+								width={50}
+								height={50}
+								priority
+							/>
 						</a>
 					</div>
 					<div className="flex lg:hidden">
