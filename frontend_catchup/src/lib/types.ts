@@ -20,3 +20,7 @@ export interface Comment {
 	likes: number;
 	authorPosition: string;
 }
+
+export type CommentBoxProps = {
+	comments: Comment[];
+};
