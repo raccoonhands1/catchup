@@ -1,12 +1,8 @@
 import { Hono } from 'hono';
 import * as jose from 'jose';
-import {
-	Queue,
-	KVNamespace,
-	QueueContentType,
-} from '@cloudflare/workers-types';
+import { Queue, KVNamespace } from '@cloudflare/workers-types';
 import { XMLParser } from 'fast-xml-parser';
-import { D1Transaction, drizzle, DrizzleD1Database } from 'drizzle-orm/d1';
+import { drizzle, DrizzleD1Database } from 'drizzle-orm/d1';
 
 import {
 	papers,
@@ -14,7 +10,6 @@ import {
 	paperTopics,
 	Paper,
 	NewPaper,
-	Topic,
 	users,
 	User,
 	userTopicSubscriptions,
@@ -440,18 +435,25 @@ async function sendToQueue(env: Env, paper: Paper) {
 			published: paper.published,
 		};
 		await env.QUEUE.send(JSON.stringify(paperInsertedMessage));
-		await env.KV.put(processedKey, 'true');
 	}
+}
+
+interface CustomVector {
+	values: number[];
+}
+function createDefaultVector(): number[] {
+	return new Array(768).fill(0);
 }
 
 userRouter.get('/articles/:topic', async c => {
 	const topic = c.req.param('topic');
+	const user = c.get('user') as User;
 
 	if (!topic) {
 		return c.json({ error: 'Missing topic parameter' }, 400);
 	}
 
-	const cacheKey = `articles:${topic}`;
+	const cacheKey = `articles:${user.userId}:${topic}`;
 	const kv = c.env.KV;
 
 	try {
@@ -500,10 +502,69 @@ userRouter.get('/articles/:topic', async c => {
 			.orderBy(desc(papers.published))
 			.all();
 
+		// Get user vector
+		let userVector: CustomVector;
+		const userVectorString = await kv.get(`user-vector-${user.userId}`);
+		if (!userVectorString) {
+			userVector = { values: createDefaultVector() };
+		} else {
+			userVector = JSON.parse(userVectorString) as CustomVector;
+		}
+
+		// Get article vectors and calculate similarities
+		const articlesWithSimilarity = await Promise.all(
+			articlesWithTopic.map(async article => {
+				const articleVectorString = await kv.get(
+					`processed:arxiv:${article.arxivId}`
+				);
+
+				if (!articleVectorString) {
+					console.warn(`Vector not found for article ${article.arxivId}`);
+					return { ...article, similarity: 0, severity: 'low' };
+				}
+				const articleVector = JSON.parse(
+					articleVectorString
+				) as VectorizeVector;
+
+				// Calculate dot product
+				const dotProduct = (userVector.values as number[]).reduce(
+					(sum: number, val: number, i: number) =>
+						sum + val * articleVector.values[i],
+					0
+				);
+
+				// Calculate magnitudes
+				const userMagnitude = Math.sqrt(
+					(userVector.values as number[]).reduce(
+						(sum: number, val: number) => sum + val * val,
+						0
+					)
+				);
+
+				const articleMagnitude = Math.sqrt(
+					(articleVector.values as number[]).reduce(
+						(sum: number, val: number) => sum + val * val,
+						0
+					)
+				);
+
+				// Calculate normalized similarity (0-1)
+				const similarity = dotProduct / (userMagnitude * articleMagnitude);
+
+				// Determine severity
+				let severity;
+				if (similarity < 0.6) severity = 'low';
+				else if (similarity < 0.7) severity = 'mid';
+				else severity = 'high';
+
+				return { ...article, similarity, severity };
+			})
+		);
+
 		const response = {
 			topic: dbTopic.name,
-			count: articlesWithTopic.length,
-			articles: articlesWithTopic,
+			count: articlesWithSimilarity.length,
+			articles: articlesWithSimilarity,
 		};
 
 		// Cache the response for one day
@@ -625,6 +686,36 @@ superUserRouter.use('*', superUserAuthMiddleware);
 // Add a dummy Hello World route for superUser
 superUserRouter.get('/hello', c => {
 	return c.json({ message: 'Hello, SuperUser!' });
+});
+
+superUserRouter.post('/clear-cache', async c => {
+	try {
+		const kv = c.env.KV;
+
+		// List all keys in the KV store
+		let keys = await kv.list();
+		let deletedCount = 0;
+
+		// Delete all keys
+		for (const key of keys.keys) {
+			await kv.delete(key.name);
+			deletedCount++;
+		}
+
+		return c.json({
+			success: true,
+			message: `Cache cleared. ${deletedCount} keys deleted.`,
+		});
+	} catch (error) {
+		console.error('Error clearing cache:', error);
+		return c.json(
+			{
+				success: false,
+				error: 'An error occurred while clearing the cache',
+			},
+			500
+		);
+	}
 });
 
 app.route('/super', superUserRouter);

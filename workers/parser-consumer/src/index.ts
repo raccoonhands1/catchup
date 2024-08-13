@@ -115,7 +115,7 @@ async function generatePaperVector(env: Env, paper: PaperInsertedMessage) {
 
 	await env.VECTORIZE_INDEX.upsert([vector]);
 
-	await env.KV.put(processedKey, 'true');
+	await env.KV.put(processedKey, JSON.stringify(vector));
 }
 
 export default {

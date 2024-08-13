@@ -11,6 +11,7 @@ export interface Article {
 	pdf: string;
 	authors: string;
 	published: string;
+	severity: 'low' | 'mid' | 'high';
 }
 
 export interface Comment {
