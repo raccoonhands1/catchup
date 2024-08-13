@@ -506,17 +506,50 @@ userRouter.get('/topics', async c => {
 	}
 });
 
-userRouter.get('/user', async c => {
-	const user = c.get('user');
-	return c.json({
-		success: true,
-		user: {
-			userId: user.userId,
-			researchField: user.researchField,
-			bio: user.bio,
-		},
+userRouter
+	.get('/user', async c => {
+		const user = c.get('user');
+		return c.json({
+			success: true,
+			user: {
+				userId: user.userId,
+				researchField: user.researchField,
+				bio: user.bio,
+			},
+		});
+	})
+	.put(async c => {
+		const user = c.get('user');
+		const { researchField, bio } = await c.req.json<{
+			researchField: string;
+			bio: string;
+		}>();
+
+		try {
+			const db = drizzle(c.env.DB);
+			const updatedUser = await db
+				.update(users)
+				.set({
+					researchField,
+					bio,
+				})
+				.where(eq(users.userId, user.userId))
+				.returning()
+				.get();
+
+			return c.json({
+				success: true,
+				user: {
+					userId: updatedUser.userId,
+					researchField: updatedUser.researchField,
+					bio: updatedUser.bio,
+				},
+			});
+		} catch (error) {
+			console.error((error as Error).message);
+			return c.json({ error: 'An error occurred while updating user' }, 500);
+		}
 	});
-});
 
 const superUserRouter = new Hono<{
 	Bindings: Env;

@@ -10,7 +10,7 @@ import Link from 'next/link';
 const navigation = [
 	{ name: 'Home', href: '/' },
 	{ name: 'Research', href: '/research' },
-	{ name: 'Preferences', href: '/preferences' },
+	{ name: 'Profile', href: '/profile' },
 ];
 
 export default function Navbar() {
