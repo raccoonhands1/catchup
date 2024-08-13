@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Sidebar, SidebarBody, SidebarLink } from '@/components/sidebar';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
@@ -8,9 +8,21 @@ import { Bars3BottomLeftIcon } from '@heroicons/react/24/outline';
 import { IconArrowBigLeftLines } from '@tabler/icons-react';
 import articleJson from '@/lib/articles.json';
 import Dashboard from '@/components/dashboard';
+import { ITopic } from '@/lib/types';
+import { getTopics } from '@/lib/actions/api';
 
 export default function SidebarDemo() {
 	const [open, setOpen] = useState(true);
+	const [topics, setTopics] = useState<ITopic[]>([]);
+
+	useEffect(() => {
+		const fetch = async () => {
+			const _topics = await getTopics();
+			setTopics(_topics);
+		};
+		fetch();
+	}, [setTopics]);
+
 	return (
 		<div
 			className={cn(
@@ -22,10 +34,10 @@ export default function SidebarDemo() {
 					<div className="flex flex-col flex-1 overflow-y-auto">
 						{open ? <Logo /> : <LogoIcon />}
 						<div className="mt-8 flex flex-col gap-2">
-							{articleJson.map((tags, idx) => (
+							{topics.map(({ name, id }) => (
 								<SidebarLink
-									key={idx}
-									label={articleJson[idx].tags[0]}
+									key={id}
+									label={name}
 									className=" rounded-xl p-1 flex"
 								/>
 							))}
