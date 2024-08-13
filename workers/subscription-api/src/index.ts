@@ -1,5 +1,4 @@
 import { Hono } from 'hono';
-import { StatusCode } from 'hono/utils/http-status';
 import * as jose from 'jose';
 import {
 	Queue,
@@ -7,7 +6,8 @@ import {
 	QueueContentType,
 } from '@cloudflare/workers-types';
 import { XMLParser } from 'fast-xml-parser';
-import { drizzle } from 'drizzle-orm/d1';
+import { D1Transaction, drizzle, DrizzleD1Database } from 'drizzle-orm/d1';
+
 import {
 	papers,
 	topics,
@@ -19,7 +19,7 @@ import {
 	User,
 	userTopicSubscriptions,
 } from './db/schema';
-import { eq, desc } from 'drizzle-orm';
+import { eq, desc, and, gte } from 'drizzle-orm';
 interface Env {
 	QUEUE: Queue;
 	DB: D1Database;
@@ -30,7 +30,6 @@ interface Env {
 	CLERK_PUBLIC_KEY: string;
 }
 interface Article {
-	id: number;
 	arxivId: string;
 	title: string;
 	summary: string;
@@ -206,187 +205,28 @@ userRouter.get('/', c => {
 });
 
 userRouter.post('/subscribe', async c => {
-	let topic: string;
-
-	try {
-		const body = await c.req.json();
-		if (typeof body === 'object' && body !== null && 'topic' in body) {
-			topic = body.topic;
-		} else {
-			throw new Error('Invalid request body structure');
-		}
-	} catch (error) {
-		return c.json(
-			{ error: 'Invalid JSON in request body or missing body' },
-			400
-		);
-	}
-	if (!topic) {
-		return c.json({ error: 'Missing topic in request body' }, 400);
-	}
-
+	const { topic, user } = await validateAndExtractInput(c);
 	const db = drizzle(c.env.DB);
 
 	try {
+		const dbTopic = await getOrCreateTopic(db, topic);
+		const subscriptionStatus = await subscribeUserToTopic(
+			db,
+			user.id,
+			dbTopic.id
+		);
 		const articles = await fetchArxivData(topic);
 
-		// Insert or get the topic
-		let dbTopic: Topic;
-		try {
-			const result = await db
-				.insert(topics)
-				.values({ name: topic })
-				.returning()
-				.get();
-			dbTopic = result;
-		} catch (error) {
-			// If topic already exists, fetch it
-			if (
-				error instanceof Error &&
-				error.message.includes('UNIQUE constraint failed')
-			) {
-				const existingTopic = await db
-					.select()
-					.from(topics)
-					.where(eq(topics.name, topic))
-					.get();
-				if (!existingTopic) {
-					throw new Error(
-						`Topic ${topic} not found after unique constraint error`
-					);
-				}
-				dbTopic = existingTopic;
-			} else {
-				throw error;
-			}
-		}
-		try {
-			const user = c.get('user');
-			const userSubscriptionResult = await db
-				.insert(userTopicSubscriptions)
-				.values({
-					userId: user.id,
-					topicId: dbTopic.id,
-				})
-				.onConflictDoNothing()
-				.returning()
-				.get();
-
-			let subscriptionStatus;
-			if (userSubscriptionResult) {
-				subscriptionStatus = 'Subscribed successfully';
-			} else {
-				subscriptionStatus = 'Already subscribed';
-			}
-		} catch (error) {
-			console.error('Error in /subscribe endpoint:', error);
-
-			let errorMessage =
-				'An unexpected error occurred while processing your request.';
-			let statusCode: StatusCode = 500;
-
-			if (error instanceof Error) {
-				if (error.message.includes('UNIQUE constraint failed')) {
-					errorMessage = 'You are already subscribed to this topic.';
-					statusCode = 409; // Conflict
-				} else {
-					errorMessage = error.message;
-				}
-			}
-
-			return c.json({ error: errorMessage }, statusCode);
-		}
-
-		let insertedCount = 0;
-		let skippedCount = 0;
-		let errorCount = 0;
-
-		// Reduce batch size to avoid hitting SQLite variable limit
-		const batchSize = 20;
-
-		for (let i = 0; i < articles.length; i += batchSize) {
-			const batch = articles.slice(i, i + batchSize);
-
-			try {
-				// Insert papers one by one to avoid the variable limit
-				for (const article of batch) {
-					try {
-						let paperId: number;
-
-						// Try to insert the paper
-						const insertedPaper = await db
-							.insert(papers)
-							.values({
-								arxivId: article.arxivId,
-								title: article.title,
-								summary: article.summary,
-								pdf: article.pdf,
-								authors: article.authors,
-								published: article.published,
-							} as NewPaper)
-							.onConflictDoNothing()
-							.returning()
-							.get();
-
-						if (insertedPaper) {
-							// New paper was inserted
-							paperId = insertedPaper.id;
-							insertedCount++;
-						} else {
-							// Paper already exists, fetch its ID
-							const existingPaper = await db
-								.select({ id: papers.id })
-								.from(papers)
-								.where(eq(papers.arxivId, article.arxivId))
-								.get();
-
-							if (!existingPaper) {
-								throw new Error(
-									`Paper with arxivId ${article.arxivId} not found after conflict`
-								);
-							}
-							paperId = existingPaper.id;
-							skippedCount++;
-						}
-
-						// Create the many-to-many relationship if it doesn't exist
-						const result = await db
-							.insert(paperTopics)
-							.values({
-								paperId: paperId,
-								topicId: dbTopic.id,
-							})
-							.onConflictDoNothing()
-							.run();
-
-						if (!result.success) {
-							console.log(
-								`M2M relationship already exists for paper ${paperId} and topic ${dbTopic.id}`
-							);
-						} else {
-							console.log(
-								`Created M2M relationship for paper ${paperId} and topic ${dbTopic.id}`
-							);
-						}
-					} catch (error) {
-						console.error(
-							`Error processing paper: ${(error as Error).message}`
-						);
-						errorCount++;
-					}
-				}
-			} catch (error) {
-				console.error(`Error processing batch: ${(error as Error).message}`);
-				errorCount += batch.length;
-			}
-		}
-
-		console.log(
-			`Inserted: ${insertedCount}, Skipped: ${skippedCount}, Errors: ${errorCount}`
+		const { insertedCount, skippedCount, errorCount } = await processArticles(
+			db,
+			articles,
+			dbTopic.id,
+			c.env
 		);
 
 		return c.json({
 			success: true,
+			subscriptionStatus,
 			totalCount: articles.length,
 			insertedCount,
 			skippedCount,
@@ -401,6 +241,208 @@ userRouter.post('/subscribe', async c => {
 		);
 	}
 });
+
+async function validateAndExtractInput(c: any) {
+	let topic: string;
+
+	try {
+		const body = await c.req.json();
+		if (typeof body === 'object' && body !== null && 'topic' in body) {
+			topic = body.topic;
+		} else {
+			throw new Error('Invalid request body structure');
+		}
+	} catch (error) {
+		throw new Error('Invalid JSON in request body or missing body');
+	}
+
+	if (!topic) {
+		throw new Error('Missing topic in request body');
+	}
+
+	const user = c.get('user');
+	return { topic, user };
+}
+
+async function getOrCreateTopic(db: any, topicName: string) {
+	try {
+		const result = await db
+			.insert(topics)
+			.values({ name: topicName })
+			.returning()
+			.get();
+		return result;
+	} catch (error) {
+		if (
+			error instanceof Error &&
+			error.message.includes('UNIQUE constraint failed')
+		) {
+			const existingTopic = await db
+				.select()
+				.from(topics)
+				.where(eq(topics.name, topicName))
+				.get();
+			if (!existingTopic) {
+				throw new Error(
+					`Topic ${topicName} not found after unique constraint error`
+				);
+			}
+			return existingTopic;
+		} else {
+			throw error;
+		}
+	}
+}
+
+async function subscribeUserToTopic(db: any, userId: string, topicId: number) {
+	try {
+		const userSubscriptionResult = await db
+			.insert(userTopicSubscriptions)
+			.values({
+				userId: userId,
+				topicId: topicId,
+			})
+			.onConflictDoNothing()
+			.returning()
+			.get();
+
+		return userSubscriptionResult
+			? 'Subscribed successfully'
+			: 'Already subscribed';
+	} catch (error) {
+		console.error('Error in subscription process:', error);
+		throw error;
+	}
+}
+async function processArticles(
+	db: DrizzleD1Database,
+	articles: any[],
+	topicId: number,
+	env: Env
+) {
+	const results = await Promise.all(
+		articles.map(article =>
+			processArticle(db, article, topicId, env).catch(error => {
+				console.error('Error processing article:', error);
+				return { error: true };
+			})
+		)
+	);
+
+	const counts = results.reduce(
+		(acc, result) => {
+			if ('inserted' in result && result.inserted) acc.insertedCount++;
+			if ('skipped' in result && result.skipped) acc.skippedCount++;
+			if ('error' in result && result.error) acc.errorCount++;
+			return acc;
+		},
+		{ insertedCount: 0, skippedCount: 0, errorCount: 0 }
+	);
+
+	return counts;
+}
+
+async function processArticle(
+	db: DrizzleD1Database,
+	article: Article,
+	topicId: number,
+	env: Env
+): Promise<{ inserted?: boolean; skipped?: boolean; error?: boolean }> {
+	try {
+		let paperId: number;
+
+		// Try to insert the paper
+		const insertedPaper = await db
+			.insert(papers)
+			.values({
+				arxivId: article.arxivId,
+				title: article.title,
+				summary: article.summary,
+				pdf: article.pdf,
+				authors: article.authors,
+				published: article.published,
+			} as NewPaper)
+			.onConflictDoNothing()
+			.returning()
+			.get();
+
+		if (insertedPaper) {
+			paperId = insertedPaper.id;
+			await sendToQueue(env, insertedPaper);
+
+			// Create the many-to-many relationship
+			await db
+				.insert(paperTopics)
+				.values({
+					paperId: paperId,
+					topicId: topicId,
+				})
+				.onConflictDoNothing()
+				.run();
+
+			return { inserted: true };
+		} else {
+			const existingPaper = await db
+				.select()
+				.from(papers)
+				.where(eq(papers.arxivId, article.arxivId))
+				.get();
+
+			if (!existingPaper) {
+				throw new Error(
+					`Paper with arxivId ${article.arxivId} not found after conflict`
+				);
+			}
+			paperId = existingPaper.id;
+			await sendToQueue(env, existingPaper);
+
+			// Check if the many-to-many relationship exists, if not create it
+			const existingRelation = await db
+				.select()
+				.from(paperTopics)
+				.where(
+					and(
+						eq(paperTopics.paperId, paperId),
+						eq(paperTopics.topicId, topicId)
+					)
+				)
+				.get();
+
+			if (!existingRelation) {
+				await db
+					.insert(paperTopics)
+					.values({
+						paperId: paperId,
+						topicId: topicId,
+					})
+					.run();
+			}
+
+			return { skipped: true };
+		}
+	} catch (error) {
+		console.error(`Error processing paper: ${(error as Error).message}`);
+		return { error: true };
+	}
+}
+
+async function sendToQueue(env: Env, paper: Paper) {
+	const processedKey = `processed:arxiv:${paper.arxivId}`;
+	if (!(await env.KV.get(processedKey))) {
+		const paperInsertedMessage = {
+			type: 'paper.inserted',
+			id: paper.id,
+			arxivId: paper.arxivId,
+			title: paper.title,
+			summary: paper.summary,
+			pdf: paper.pdf,
+			authors: paper.authors,
+			published: paper.published,
+		};
+		await env.QUEUE.send(JSON.stringify(paperInsertedMessage));
+		await env.KV.put(processedKey, 'true');
+	}
+}
 
 userRouter.get('/articles/:topic', async c => {
 	const topic = c.req.param('topic');
@@ -432,6 +474,10 @@ userRouter.get('/articles/:topic', async c => {
 			return c.json({ error: 'Topic not found' }, 404);
 		}
 
+		const sevenDaysAgo = new Date();
+		sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+		const sevenDaysAgoString = sevenDaysAgo.toISOString().split('T')[0];
+
 		// Then, find all papers associated with this topic
 		const articlesWithTopic = await db
 			.select({
@@ -445,7 +491,12 @@ userRouter.get('/articles/:topic', async c => {
 			})
 			.from(papers)
 			.innerJoin(paperTopics, eq(papers.id, paperTopics.paperId))
-			.where(eq(paperTopics.topicId, dbTopic.id))
+			.where(
+				and(
+					eq(paperTopics.topicId, dbTopic.id),
+					gte(papers.published, sevenDaysAgoString)
+				)
+			)
 			.orderBy(desc(papers.published))
 			.all();
 
@@ -536,6 +587,20 @@ userRouter
 				.where(eq(users.userId, user.userId))
 				.returning()
 				.get();
+
+			try {
+				await c.env.QUEUE.send(
+					JSON.stringify({
+						type: 'user.updated',
+						userId: user.userId,
+						researchField,
+						bio,
+					})
+				);
+			} catch (error) {
+				console.error((error as Error).message);
+				return c.json({ error: 'An error occurred while updating user' }, 500);
+			}
 
 			return c.json({
 				success: true,

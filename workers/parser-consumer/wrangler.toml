@@ -9,6 +9,18 @@ queue = "catchup-processing"
 max_batch_size = 1
 max_batch_timeout = 30
 
+[[kv_namespaces]]
+binding = "KV"
+id = "8c4809f985214cddbeb53f6a68952300"
+preview_id="8c4809f985214cddbeb53f6a68952300"
+
+[ai]
+binding = "AI"
+
+[[vectorize]]
+binding = "VECTORIZE_INDEX"
+index_name = "catchup-demo"
+
 # Automatically place your workloads in an optimal location to minimize latency.
 # If you are running back-end logic in a Worker, running it closer to your back-end infrastructure
 # rather than the end user may result in better performance.
