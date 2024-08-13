@@ -23,3 +23,29 @@ export async function getTopics() {
 		throw error;
 	}
 }
+
+export async function getArticlesForTopic(topicId: string) {
+	try {
+		const options = {
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${process.env.WORKER_API_APP_SECRET}`,
+			},
+		};
+		const res = await fetch(
+			`${process.env.WORKER_API_URL}/articles/${topicId}`,
+			options
+		);
+
+		if (!res.ok) {
+			throw new Error(`HTTP error! status: ${res.status}`);
+		}
+
+		const data = await res.json();
+		console.log(data.topic);
+		return data.articles;
+	} catch (error) {
+		console.error('Failed to fetch articles for topic:', error);
+		throw error;
+	}
+}

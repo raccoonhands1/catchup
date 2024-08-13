@@ -6,14 +6,15 @@ import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { Bars3BottomLeftIcon } from '@heroicons/react/24/outline';
 import { IconArrowBigLeftLines } from '@tabler/icons-react';
-import articleJson from '@/lib/articles.json';
 import Dashboard from '@/components/dashboard';
 import { ITopic } from '@/lib/types';
 import { getTopics } from '@/lib/actions/api';
+import useTopicStore from '@/lib/store/ui';
 
 export default function SidebarDemo() {
 	const [open, setOpen] = useState(true);
 	const [topics, setTopics] = useState<ITopic[]>([]);
+	const { setTopic } = useTopicStore();
 
 	useEffect(() => {
 		const fetch = async () => {
@@ -39,6 +40,9 @@ export default function SidebarDemo() {
 									key={id}
 									label={name}
 									className=" rounded-xl p-1 flex"
+									onClick={() => {
+										setTopic({ name, id });
+									}}
 								/>
 							))}
 						</div>
@@ -48,7 +52,6 @@ export default function SidebarDemo() {
 			<Dashboard />
 		</div>
 	);
-
 }
 const Logo = () => {
 	return (

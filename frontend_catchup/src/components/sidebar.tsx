@@ -4,6 +4,8 @@ import React, { useState, createContext, useContext } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { IconArrowBigLeftLines, IconX } from '@tabler/icons-react';
 import { useToast } from '@/components/ui/use-toast';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 
 interface SidebarContextProps {
 	open: boolean;
@@ -147,47 +149,45 @@ export const MobileSidebar = ({
 export const SidebarLink = ({
 	label,
 	className,
+	onClick,
 	...props
 }: {
 	label: string;
 	className?: string;
 	props?: string;
+	onClick?: () => void;
+	[key: string]: any;
 }) => {
 	const { open } = useSidebar();
-	const { toast } = useToast();
 
 	return (
 		<div
-			className={cn('flex items-center justify-start py-2', className)}
+			className={cn(
+				'flex items-center justify-start py-2 overflow-x-hidden',
+				className
+			)}
+			onClick={onClick}
 			{...props}
 		>
-			{/* {link.icon} */}
-
-			<motion.span
+			<motion.div
 				animate={{
-					display: open ? 'inline-block' : 'none',
+					display: open ? 'block' : 'none',
 					opacity: open ? 1 : 0,
 				}}
-				className="text-neutral-700 dark:text-neutral-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0"
+				className="text-neutral-700 dark:text-neutral-200 text-sm group-hover/sidebar:translate-x-1 transition-all duration-150"
 			>
-				<div className="flex w-[15rem] justify-between items-center text-base  hover:border-gray-700 border-[1px] border-grey rounded-md">
-					<span className="ml-2 group-hover/modal-btn:translate-x-40 text-center transition duration-500 overflow-x-hidden">
-						{label}
-						{/*TODO: Implement change topic*/}
-					</span>
-					<button
-						onClick={() =>
-							// TODO: implement subscription
-							toast({
-								description: 'You have subscribed to the topic',
-							})
-						}
-						className="bg-gray-700 rounded-md text-white p-2 rounded-bl-none rounded-tl-none"
+				<Card className="w-[15rem] p-0 hover:border-gray-700">
+					<Button
+						variant="ghost"
+						className="w-full justify-between items-center text-base"
 					>
-						Subscribe
-					</button>
-				</div>
-			</motion.span>
+						<span className="group-hover/modal-btn:translate-x-1 transition-all duration-500 overflow-hidden">
+							{label}
+						</span>
+						{/* TODO: Implement change topic */}
+					</Button>
+				</Card>
+			</motion.div>
 		</div>
 	);
 };
