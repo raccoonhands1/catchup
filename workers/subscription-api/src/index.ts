@@ -1,4 +1,5 @@
 import { Hono } from 'hono';
+import * as jose from 'jose';
 import {
 	Queue,
 	KVNamespace,
@@ -17,9 +18,12 @@ import {
 import { eq, desc } from 'drizzle-orm';
 interface Env {
 	QUEUE: Queue;
-	APP_SECRET: string;
 	DB: D1Database;
 	KV: KVNamespace;
+	// env's
+	APP_SECRET: string;
+	JWT_ISSUER: string;
+	CLERK_PUBLIC_KEY: string;
 }
 interface Article {
 	id: number;
@@ -31,17 +35,59 @@ interface Article {
 	published: string;
 }
 
-const app = new Hono<{ Bindings: Env }>();
+const app = new Hono<{
+	Bindings: Env;
+	Variables: {
+		userId: string;
+	};
+}>();
 
-const authMiddleware = async (c: any, next: () => Promise<void>) => {
+const jwtMiddleware = async (c: any, next: () => Promise<void>) => {
 	const authHeader = c.req.header('Authorization');
-	if (!authHeader || authHeader !== `Bearer ${c.env.APP_SECRET}`) {
-		return c.json({ error: 'Unauthorized' }, 401);
+	if (!authHeader || !authHeader.startsWith('Bearer ')) {
+		return c.json({ error: 'Missing or invalid Authorization header' }, 401);
 	}
+
+	const token = authHeader.split(' ')[1];
+
+	try {
+		const rawPublicKey = c.env.CLERK_PUBLIC_KEY;
+		if (!rawPublicKey) {
+			console.error('CLERK_PUBLIC_KEY is not set in the environment');
+			return c.json({ error: 'Server configuration error' }, 500);
+		}
+
+		const formattedPublicKey = `-----BEGIN PUBLIC KEY-----\n${rawPublicKey
+			.match(/.{1,64}/g)
+			.join('\n')}\n-----END PUBLIC KEY-----`;
+		const publicKey = await jose.importSPKI(formattedPublicKey, 'RS256');
+		const { payload } = await jose.jwtVerify(token, publicKey, {
+			issuer: c.env.JWT_ISSUER,
+		});
+
+		if (typeof payload.sub !== 'string') {
+			throw new Error('Invalid sub claim');
+		}
+
+		c.set('userId', payload.sub);
+	} catch (error) {
+		console.error('Token verification failed:', error);
+		return c.json({ error: 'Invalid token' }, 401);
+	}
+
 	await next();
 };
 
-app.use(authMiddleware);
+//const authMiddleware = async (c: any, next: () => Promise<void>) => {
+//	const authHeader = c.req.header('Authorization');
+//	if (!authHeader || authHeader !== `Bearer ${c.env.APP_SECRET}`) {
+//		return c.json({ error: 'Unauthorized' }, 401);
+//	}
+//	await next();
+//};
+
+//app.use(authMiddleware);
+app.use(jwtMiddleware);
 
 async function fetchArxivData(topic: string): Promise<Paper[]> {
 	const currentDate = new Date();
@@ -368,6 +414,11 @@ app.get('/topics', async c => {
 		console.error((error as Error).message);
 		return c.json({ error: 'An error occurred while fetching topics' }, 500);
 	}
+});
+
+app.get('/user', async c => {
+	const userId = c.get('userId');
+	return c.json({ userId });
 });
 
 export default app;

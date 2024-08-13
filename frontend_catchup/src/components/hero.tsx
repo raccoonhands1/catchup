@@ -4,6 +4,7 @@ import { PlaceholdersAndVanishInput } from '@/components/placeholders-and-vanish
 import { CardHoverEffectDemo } from '@/components/example-topics';
 import Image from 'next/image';
 import { useState } from 'react';
+import { useAuth, useUser } from '@clerk/nextjs';
 export default function Hero() {
 	const placeholders = [
 		//topic names
@@ -25,8 +26,11 @@ export default function Hero() {
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setTopic(e.target.value);
 	};
-	const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+	const { getToken } = useAuth();
+	const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
+		const token = await getToken({ template: 'default' });
+		console.log(token);
 		console.log(`subscribed to ${topic}`);
 		// TODO: implement subscription
 	};

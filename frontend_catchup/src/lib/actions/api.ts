@@ -1,11 +1,13 @@
 'use server';
+import { auth } from '@clerk/nextjs/server';
 
 export async function getTopics() {
+	const { getToken } = auth();
 	try {
 		const options = {
 			method: 'GET',
 			headers: {
-				Authorization: `Bearer ${process.env.WORKER_API_APP_SECRET}`,
+				Authorization: `Bearer ${await getToken({ template: 'default' })}`,
 			},
 		};
 		const res = await fetch(`${process.env.WORKER_API_URL}/topics`, options);
@@ -25,11 +27,12 @@ export async function getTopics() {
 }
 
 export async function getArticlesForTopic(topicId: string) {
+	const { getToken } = auth();
 	try {
 		const options = {
 			method: 'GET',
 			headers: {
-				Authorization: `Bearer ${process.env.WORKER_API_APP_SECRET}`,
+				Authorization: `Bearer ${await getToken({ template: 'default' })}`,
 			},
 		};
 		const res = await fetch(
