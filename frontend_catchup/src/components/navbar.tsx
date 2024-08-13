@@ -17,8 +17,8 @@ import {
 const navigation = [
   { name: "Home", href: "/" },
   { name: "Research", href: "/research" },
-  { name: "Marketplace", href: "/marketplace" },
-  { name: "Organization", href: "/organization" },
+  // { name: "Marketplace", href: "/marketplace" },
+  // { name: "Organization", href: "/organization" },
 ];
 const login = { name: "Log in", href: "/sigin" };
 
