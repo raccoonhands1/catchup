@@ -42,6 +42,13 @@ const app = new Hono<{
 	};
 }>();
 
+const userRouter = new Hono<{
+	Bindings: Env;
+	Variables: {
+		userId: string;
+	};
+}>();
+
 const jwtMiddleware = async (c: any, next: () => Promise<void>) => {
 	const authHeader = c.req.header('Authorization');
 	if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -77,17 +84,15 @@ const jwtMiddleware = async (c: any, next: () => Promise<void>) => {
 
 	await next();
 };
+userRouter.use('*', jwtMiddleware);
 
-//const authMiddleware = async (c: any, next: () => Promise<void>) => {
-//	const authHeader = c.req.header('Authorization');
-//	if (!authHeader || authHeader !== `Bearer ${c.env.APP_SECRET}`) {
-//		return c.json({ error: 'Unauthorized' }, 401);
-//	}
-//	await next();
-//};
-
-//app.use(authMiddleware);
-app.use(jwtMiddleware);
+const superUserAuthMiddleware = async (c: any, next: () => Promise<void>) => {
+	const authHeader = c.req.header('Authorization');
+	if (!authHeader || authHeader !== `Bearer ${c.env.APP_SECRET}`) {
+		return c.json({ error: 'Unauthorized' }, 401);
+	}
+	await next();
+};
 
 async function fetchArxivData(topic: string): Promise<Paper[]> {
 	const currentDate = new Date();
@@ -166,11 +171,11 @@ async function fetchArxivData(topic: string): Promise<Paper[]> {
 	return allArticles;
 }
 
-app.get('/', c => {
+userRouter.get('/', c => {
 	return c.json({ status: 'ok' });
 });
 
-app.post('/subscribe', async c => {
+userRouter.post('/subscribe', async c => {
 	let topic: string;
 
 	try {
@@ -329,7 +334,7 @@ app.post('/subscribe', async c => {
 	}
 });
 
-app.get('/articles/:topic', async c => {
+userRouter.get('/articles/:topic', async c => {
 	const topic = c.req.param('topic');
 
 	if (!topic) {
@@ -392,7 +397,7 @@ app.get('/articles/:topic', async c => {
 	}
 });
 
-app.get('/topics', async c => {
+userRouter.get('/topics', async c => {
 	try {
 		const db = drizzle(c.env.DB);
 
@@ -416,9 +421,23 @@ app.get('/topics', async c => {
 	}
 });
 
-app.get('/user', async c => {
+userRouter.get('/user', async c => {
 	const userId = c.get('userId');
 	return c.json({ userId });
 });
+
+const superUserRouter = new Hono<{
+	Bindings: Env;
+}>();
+
+superUserRouter.use('*', superUserAuthMiddleware);
+
+// Add a dummy Hello World route for superUser
+superUserRouter.get('/hello', c => {
+	return c.json({ message: 'Hello, SuperUser!' });
+});
+
+app.route('/super', superUserRouter);
+app.route('/', userRouter);
 
 export default app;
