@@ -52,3 +52,31 @@ export async function getArticlesForTopic(topicId: string) {
 		throw error;
 	}
 }
+
+// in api.ts
+
+export async function subscribeTopic(topic: string) {
+	const { getToken } = auth();
+	try {
+		const options = {
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${await getToken({ template: 'default' })}`,
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({ topic }),
+		};
+
+		const res = await fetch(`${process.env.WORKER_API_URL}/subscribe`, options);
+
+		if (!res.ok) {
+			throw new Error(`HTTP error! status: ${res.status}`);
+		}
+
+		const data = await res.json();
+		return data;
+	} catch (error) {
+		console.error('Failed to subscribe to topic:', error);
+		throw error;
+	}
+}
