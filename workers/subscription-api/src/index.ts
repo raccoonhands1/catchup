@@ -1,4 +1,5 @@
 import { Hono } from 'hono';
+import { StatusCode } from 'hono/utils/http-status';
 import * as jose from 'jose';
 import {
 	Queue,
@@ -14,6 +15,9 @@ import {
 	Paper,
 	NewPaper,
 	Topic,
+	users,
+	User,
+	userTopicSubscriptions,
 } from './db/schema';
 import { eq, desc } from 'drizzle-orm';
 interface Env {
@@ -45,7 +49,7 @@ const app = new Hono<{
 const userRouter = new Hono<{
 	Bindings: Env;
 	Variables: {
-		userId: string;
+		user: User;
 	};
 }>();
 
@@ -76,7 +80,32 @@ const jwtMiddleware = async (c: any, next: () => Promise<void>) => {
 			throw new Error('Invalid sub claim');
 		}
 
-		c.set('userId', payload.sub);
+		const userId = payload.sub;
+
+		// Check if user exists
+		const db = drizzle(c.env.DB);
+		let user = await db
+			.select()
+			.from(users)
+			.where(eq(users.userId, userId))
+			.get();
+
+		if (!user) {
+			// Create new user if not exists
+			user = await db
+				.insert(users)
+				.values({
+					userId: userId,
+					// You can set default values for researchField and bio here if needed
+					// researchField: '',
+					// bio: '',
+				})
+				.returning()
+				.get();
+		}
+
+		// Add the user object to the context
+		c.set('user', user);
 	} catch (error) {
 		console.error('Token verification failed:', error);
 		return c.json({ error: 'Invalid token' }, 401);
@@ -84,6 +113,7 @@ const jwtMiddleware = async (c: any, next: () => Promise<void>) => {
 
 	await next();
 };
+
 userRouter.use('*', jwtMiddleware);
 
 const superUserAuthMiddleware = async (c: any, next: () => Promise<void>) => {
@@ -195,9 +225,10 @@ userRouter.post('/subscribe', async c => {
 		return c.json({ error: 'Missing topic in request body' }, 400);
 	}
 
+	const db = drizzle(c.env.DB);
+
 	try {
 		const articles = await fetchArxivData(topic);
-		const db = drizzle(c.env.DB);
 
 		// Insert or get the topic
 		let dbTopic: Topic;
@@ -229,6 +260,43 @@ userRouter.post('/subscribe', async c => {
 				throw error;
 			}
 		}
+		try {
+			const user = c.get('user');
+			const userSubscriptionResult = await db
+				.insert(userTopicSubscriptions)
+				.values({
+					userId: user.id,
+					topicId: dbTopic.id,
+				})
+				.onConflictDoNothing()
+				.returning()
+				.get();
+
+			let subscriptionStatus;
+			if (userSubscriptionResult) {
+				subscriptionStatus = 'Subscribed successfully';
+			} else {
+				subscriptionStatus = 'Already subscribed';
+			}
+		} catch (error) {
+			console.error('Error in /subscribe endpoint:', error);
+
+			let errorMessage =
+				'An unexpected error occurred while processing your request.';
+			let statusCode: StatusCode = 500;
+
+			if (error instanceof Error) {
+				if (error.message.includes('UNIQUE constraint failed')) {
+					errorMessage = 'You are already subscribed to this topic.';
+					statusCode = 409; // Conflict
+				} else {
+					errorMessage = error.message;
+				}
+			}
+
+			return c.json({ error: errorMessage }, statusCode);
+		}
+
 		let insertedCount = 0;
 		let skippedCount = 0;
 		let errorCount = 0;
@@ -400,15 +468,32 @@ userRouter.get('/articles/:topic', async c => {
 userRouter.get('/topics', async c => {
 	try {
 		const db = drizzle(c.env.DB);
+		const showSubscribedOnly = c.req.query('subscribed') === 'true';
+		const user = c.get('user') as User;
 
-		// Fetch all topics from the database
-		const allTopics = await db
+		const baseQuery = db
+			.select({
+				id: topics.id,
+				name: topics.name,
+			})
+			.from(topics);
+
+		const subscribedQuery = db
 			.select({
 				id: topics.id,
 				name: topics.name,
 			})
 			.from(topics)
-			.all();
+			.innerJoin(
+				userTopicSubscriptions,
+				eq(userTopicSubscriptions.topicId, topics.id)
+			)
+			.where(eq(userTopicSubscriptions.userId, user.id));
+
+		const allTopics = await (showSubscribedOnly
+			? subscribedQuery
+			: baseQuery
+		).all();
 
 		return c.json({
 			success: true,
@@ -422,8 +507,15 @@ userRouter.get('/topics', async c => {
 });
 
 userRouter.get('/user', async c => {
-	const userId = c.get('userId');
-	return c.json({ userId });
+	const user = c.get('user');
+	return c.json({
+		success: true,
+		user: {
+			userId: user.userId,
+			researchField: user.researchField,
+			bio: user.bio,
+		},
+	});
 });
 
 const superUserRouter = new Hono<{

@@ -72,3 +72,4 @@ export type Topic = typeof topics.$inferSelect;
 export type NewTopic = typeof topics.$inferInsert;
 export type HackerNewsArticle = typeof hackerNewsArticles.$inferSelect;
 export type NewHackerNewsArticle = typeof hackerNewsArticles.$inferInsert;
+export type User = typeof users.$inferSelect;
