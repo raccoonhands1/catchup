@@ -346,4 +346,28 @@ app.get('/articles/:topic', async c => {
 	}
 });
 
+app.get('/topics', async c => {
+	try {
+		const db = drizzle(c.env.DB);
+
+		// Fetch all topics from the database
+		const allTopics = await db
+			.select({
+				id: topics.id,
+				name: topics.name,
+			})
+			.from(topics)
+			.all();
+
+		return c.json({
+			success: true,
+			count: allTopics.length,
+			topics: allTopics,
+		});
+	} catch (error) {
+		console.error((error as Error).message);
+		return c.json({ error: 'An error occurred while fetching topics' }, 500);
+	}
+});
+
 export default app;
