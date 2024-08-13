@@ -13,6 +13,8 @@ import {
 	users,
 	User,
 	userTopicSubscriptions,
+	hackerNewsArticles,
+	NewHackerNewsArticle,
 } from './db/schema';
 import { eq, desc, and, gte } from 'drizzle-orm';
 interface Env {
@@ -715,6 +717,89 @@ superUserRouter.post('/clear-cache', async c => {
 			},
 			500
 		);
+	}
+});
+
+interface HackerNewsStory {
+	url?: string;
+	title: string;
+	score: number;
+	by: string;
+	time: number;
+}
+superUserRouter.get('/hacker-news', async c => {
+	try {
+		// Fetch the latest story IDs
+		const response = await fetch(
+			'https://hacker-news.firebaseio.com/v0/topstories.json'
+		);
+		const storyIds = (await response.json()) as number[];
+
+		// Fetch details for each story
+		const storiesPromises = storyIds.map(id =>
+			fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`).then(
+				res => res.json() as Promise<HackerNewsStory>
+			)
+		);
+		const stories: HackerNewsStory[] = await Promise.all(storiesPromises);
+		const db = drizzle(c.env.DB);
+
+		// Process and store each story
+		const processedStories = await Promise.all(
+			stories.map(async story => {
+				if (!story.url) {
+					return null; // Skip items without URLs (e.g., "Ask HN" posts)
+				}
+				try {
+					// Check if the article already exists in the database
+					const existingArticle = await db
+						.select()
+						.from(hackerNewsArticles)
+						.where(eq(hackerNewsArticles.url, story.url))
+						.limit(1);
+
+					if (existingArticle.length > 0) {
+						// Update the existing article
+						await db
+							.update(hackerNewsArticles)
+							.set({
+								title: story.title,
+								points: story.score,
+								author: story.by,
+								published: new Date(story.time * 1000).toISOString(),
+							})
+							.where(eq(hackerNewsArticles.url, story.url));
+
+						return existingArticle[0];
+					} else {
+						// Insert a new article
+						const newArticle: NewHackerNewsArticle = {
+							title: story.title,
+							url: story.url,
+							points: story.score,
+							author: story.by,
+							published: new Date(story.time * 1000).toISOString(),
+						};
+
+						const insertResult = await db
+							.insert(hackerNewsArticles)
+							.values(newArticle)
+							.returning();
+						return insertResult[0];
+					}
+				} catch (error) {
+					console.error(`Error processing article ${story.url}:`, error);
+					return null;
+				}
+			})
+		);
+
+		const validStories = processedStories.filter(story => story !== null);
+
+		return c.json(validStories);
+	} catch (error) {
+		console.error('Error fetching Hacker News data:', error);
+		return c.json({ error: 'Failed to fetch Hacker News data' }, 500);
 	}
 });
 
